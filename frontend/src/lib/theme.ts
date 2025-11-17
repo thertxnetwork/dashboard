@@ -116,11 +116,17 @@ export const getTheme = (mode: 'light' | 'dark') => createTheme({
             fontSize: '0.875rem',
           },
           '& .MuiInputBase-input': {
-            padding: '8px 12px',
+            padding: '10px 12px',
           },
           '& .MuiOutlinedInput-root': {
             '& fieldset': {
               borderColor: mode === 'light' ? '#e2e8f0' : '#334155',
+            },
+          },
+          '& .MuiInputLabel-root': {
+            transform: 'translate(14px, 11px) scale(1)',
+            '&.MuiInputLabel-shrink': {
+              transform: 'translate(14px, -9px) scale(0.75)',
             },
           },
         },
@@ -132,10 +138,10 @@ export const getTheme = (mode: 'light' | 'dark') => createTheme({
           fontSize: '0.875rem',
         },
         input: {
-          padding: '8px 12px',
+          padding: '10px 12px',
         },
         multiline: {
-          padding: '8px 12px',
+          padding: '10px 12px',
         },
       },
     },
