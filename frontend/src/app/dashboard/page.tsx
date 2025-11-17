@@ -13,6 +13,7 @@ import {
 import { Users, UserCheck, UserX, TrendingUp } from 'lucide-react';
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import apiClient from '@/lib/api';
+import QuranAyatCard from '@/components/QuranAyatCard';
 
 interface Stats {
   total_users: number;
@@ -98,6 +99,11 @@ export default function DashboardPage() {
   return (
     <DashboardLayout>
       <Grid container spacing={3}>
+        {/* Quran Ayat Card - Full Width */}
+        <Grid size={{ xs: 12 }}>
+          <QuranAyatCard autoChangeInterval={30000} />
+        </Grid>
+
         {kpiCards.map((card, index) => (
           <Grid size={{ xs: 12, sm: 6, md: 3 }} key={index}>
             <Card>
