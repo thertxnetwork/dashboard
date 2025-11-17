@@ -29,6 +29,10 @@ DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',')
 
+# Disable automatic slash appending to allow URLs without trailing slashes
+# This prevents issues with POST/PUT/PATCH requests from the Next.js proxy
+APPEND_SLASH = False
+
 
 # Application definition
 
