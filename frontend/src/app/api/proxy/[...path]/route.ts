@@ -70,9 +70,15 @@ async function handleRequest(
     const path = params.path.join('/');
     const searchParams = request.nextUrl.searchParams.toString();
     
-    // Properly construct URL, handling trailing slashes
-    const baseUrl = BACKEND_API_URL.replace(/\/+$/, ''); // Remove trailing slashes
-    const fullPath = path.startsWith('/') ? path : `/${path}`;
+    // Properly construct URL for Django which requires trailing slashes
+    const baseUrl = BACKEND_API_URL.replace(/\/+$/, ''); // Remove trailing slashes from base
+    let fullPath = path.startsWith('/') ? path : `/${path}`;
+    
+    // Ensure path ends with trailing slash for Django APPEND_SLASH setting
+    if (!fullPath.endsWith('/')) {
+      fullPath = `${fullPath}/`;
+    }
+    
     const url = `${baseUrl}${fullPath}${searchParams ? `?${searchParams}` : ''}`;
 
     console.log(`[Proxy] ${method} request to backend`);
