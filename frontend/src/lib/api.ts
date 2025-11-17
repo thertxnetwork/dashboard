@@ -1,19 +1,9 @@
 import axios from 'axios';
 
-// Automatically use HTTPS for production environments
-const getApiBaseUrl = () => {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
-  
-  // If we're in production (HTTPS site) and API URL is HTTP, convert to HTTPS
-  if (typeof window !== 'undefined' && window.location.protocol === 'https:' && apiUrl.startsWith('http://')) {
-    return apiUrl.replace('http://', 'https://');
-  }
-  
-  return apiUrl;
-};
-
+// Use proxy for API calls to avoid Mixed Content errors
+// Frontend (HTTPS) -> Next.js Proxy (HTTPS) -> Backend (HTTP)
 const apiClient = axios.create({
-  baseURL: getApiBaseUrl(),
+  baseURL: '/api/proxy',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -48,7 +38,7 @@ apiClient.interceptors.response.use(
         if (refreshToken) {
           try {
             const response = await axios.post(
-              `${getApiBaseUrl()}/auth/refresh/`,
+              '/api/proxy/auth/refresh/',
               { refresh: refreshToken }
             );
 

@@ -24,10 +24,10 @@
 3. **Configure Environment Variables**
    In the Vercel dashboard, add:
    ```
-   NEXT_PUBLIC_API_URL=https://your-backend-domain.com/api
+   BACKEND_API_URL=http://72.61.147.33:8888/api
    ```
    
-   **Important**: Always use `https://` protocol for production API URLs to prevent Mixed Content errors. The application automatically upgrades HTTP to HTTPS when deployed on HTTPS sites, but it's best practice to configure HTTPS URLs directly.
+   **Important**: Use HTTP URL for the backend. The Next.js proxy automatically handles the HTTPS→HTTP forwarding, preventing Mixed Content errors while keeping your backend on HTTP.
 
 4. **Deploy**
    - Click "Deploy"
@@ -255,7 +255,12 @@ docker-compose exec backend python manage.py createsuperuser
 
 ### Frontend
 ```bash
-NEXT_PUBLIC_API_URL=https://api.your-domain.com/api
+# Backend API URL (server-side only)
+# Use HTTP - Next.js proxy handles HTTPS forwarding
+BACKEND_API_URL=http://your-backend-ip:port/api
+
+# Example:
+# BACKEND_API_URL=http://72.61.147.33:8888/api
 ```
 
 ### Backend (Production)

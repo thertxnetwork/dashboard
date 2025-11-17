@@ -129,15 +129,15 @@ The application will be available at `http://localhost:3000`
 
 ### Frontend (.env.local)
 ```
-# Local development
-NEXT_PUBLIC_API_URL=http://localhost:8000/api
+# Backend API URL (server-side only, not exposed to browser)
+# Always use HTTP - the Next.js proxy handles HTTPS for you
+BACKEND_API_URL=http://localhost:8000/api
 
-# Production - Use HTTPS URL for API endpoint
-# The app will automatically convert HTTP to HTTPS when deployed on HTTPS
-# NEXT_PUBLIC_API_URL=https://your-backend-domain.com/api
+# Production example
+# BACKEND_API_URL=http://72.61.147.33:8888/api
 ```
 
-**Important**: When deploying to production (Vercel, etc.), ensure your `NEXT_PUBLIC_API_URL` uses `https://` protocol to avoid Mixed Content warnings. The application will automatically upgrade HTTP to HTTPS when running on an HTTPS site.
+**Architecture**: The frontend uses a built-in Next.js API proxy to forward requests from HTTPS (frontend) to HTTP (backend), avoiding Mixed Content errors. The backend URL is only used server-side and never exposed to the browser.
 
 ### Backend (environment variables)
 ```
