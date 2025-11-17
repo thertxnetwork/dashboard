@@ -20,6 +20,7 @@ import {
   Stack,
 } from '@mui/material';
 import apiClient from '@/lib/api';
+import { useToast } from '@/contexts/ToastContext';
 
 interface User {
   id?: number;
@@ -43,6 +44,7 @@ interface UserFormDialogProps {
 export default function UserFormDialog({ open, onClose, onSuccess, user }: UserFormDialogProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const toast = useToast();
   const [formData, setFormData] = useState<User>({
     username: '',
     email: '',
@@ -97,6 +99,7 @@ export default function UserFormDialog({ open, onClose, onSuccess, user }: UserF
       if (user?.id) {
         // Update existing user
         await apiClient.put(`/users/${user.id}/`, payload);
+        toast.showSuccess('User updated successfully');
       } else {
         // Create new user
         if (!payload.password) {
@@ -105,6 +108,7 @@ export default function UserFormDialog({ open, onClose, onSuccess, user }: UserF
           return;
         }
         await apiClient.post('/users/', payload);
+        toast.showSuccess('User created successfully');
       }
 
       onSuccess();
@@ -114,6 +118,7 @@ export default function UserFormDialog({ open, onClose, onSuccess, user }: UserF
         ? Object.values(err.response.data.errors).flat().join(', ')
         : 'Failed to save user';
       setError(message);
+      toast.showError(message);
     } finally {
       setLoading(false);
     }

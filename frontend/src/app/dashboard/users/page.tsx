@@ -28,6 +28,7 @@ import {
 import { Search, Plus, Edit, Trash2 } from 'lucide-react';
 import apiClient from '@/lib/api';
 import UserFormDialog from '@/components/users/UserFormDialog';
+import { useToast } from '@/contexts/ToastContext';
 
 interface User {
   id: number;
@@ -51,6 +52,7 @@ export default function UsersPage() {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [userToDelete, setUserToDelete] = useState<User | null>(null);
+  const toast = useToast();
 
   const fetchUsers = async () => {
     try {
@@ -114,9 +116,11 @@ export default function UsersPage() {
       await apiClient.delete(`/users/${userToDelete.id}/`);
       setDeleteDialogOpen(false);
       setUserToDelete(null);
+      toast.showSuccess('User deleted successfully');
       fetchUsers();
     } catch (error) {
       console.error('Error deleting user:', error);
+      toast.showError('Failed to delete user');
     }
   };
 
