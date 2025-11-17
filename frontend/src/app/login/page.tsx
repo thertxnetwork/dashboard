@@ -43,7 +43,7 @@ export default function LoginPage() {
         justifyContent: 'center',
         background: (theme) =>
           theme.palette.mode === 'light'
-            ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+            ? 'linear-gradient(135deg, #f5f7fa 0%, #e8eaf6 100%)'
             : 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)',
       }}
     >

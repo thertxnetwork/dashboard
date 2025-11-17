@@ -1,7 +1,9 @@
 import axios from 'axios';
 
+// Use proxy for API calls to avoid Mixed Content errors
+// Frontend (HTTPS) -> Next.js Proxy (HTTPS) -> Backend (HTTP)
 const apiClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api',
+  baseURL: '/api/proxy',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -36,7 +38,7 @@ apiClient.interceptors.response.use(
         if (refreshToken) {
           try {
             const response = await axios.post(
-              `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh/`,
+              '/api/proxy/auth/refresh/',
               { refresh: refreshToken }
             );
 
