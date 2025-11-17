@@ -19,9 +19,15 @@ import {
   Chip,
   IconButton,
   CircularProgress,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from '@mui/material';
 import { Search, Plus, Edit, Trash2 } from 'lucide-react';
 import apiClient from '@/lib/api';
+import UserFormDialog from '@/components/users/UserFormDialog';
 
 interface User {
   id: number;
@@ -41,6 +47,10 @@ export default function UsersPage() {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [search, setSearch] = useState('');
   const [total, setTotal] = useState(0);
+  const [formOpen, setFormOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [userToDelete, setUserToDelete] = useState<User | null>(null);
 
   const fetchUsers = async () => {
     try {
@@ -82,13 +92,45 @@ export default function UsersPage() {
     setPage(0);
   };
 
+  const handleAddUser = () => {
+    setSelectedUser(null);
+    setFormOpen(true);
+  };
+
+  const handleEditUser = (user: User) => {
+    setSelectedUser(user);
+    setFormOpen(true);
+  };
+
+  const handleDeleteClick = (user: User) => {
+    setUserToDelete(user);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!userToDelete) return;
+
+    try {
+      await apiClient.delete(`/users/${userToDelete.id}/`);
+      setDeleteDialogOpen(false);
+      setUserToDelete(null);
+      fetchUsers();
+    } catch (error) {
+      console.error('Error deleting user:', error);
+    }
+  };
+
+  const handleFormSuccess = () => {
+    fetchUsers();
+  };
+
   return (
     <DashboardLayout>
       <Card>
         <CardContent>
           <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
             <Typography variant="h3">User Management</Typography>
-            <Button variant="contained" startIcon={<Plus size={20} />}>
+            <Button variant="contained" startIcon={<Plus size={20} />} onClick={handleAddUser}>
               Add User
             </Button>
           </Box>
@@ -153,10 +195,10 @@ export default function UsersPage() {
                           {new Date(user.created_at).toLocaleDateString()}
                         </TableCell>
                         <TableCell align="right">
-                          <IconButton size="small" color="primary">
+                          <IconButton size="small" color="primary" onClick={() => handleEditUser(user)}>
                             <Edit size={18} />
                           </IconButton>
-                          <IconButton size="small" color="error">
+                          <IconButton size="small" color="error" onClick={() => handleDeleteClick(user)}>
                             <Trash2 size={18} />
                           </IconButton>
                         </TableCell>
@@ -179,6 +221,28 @@ export default function UsersPage() {
           )}
         </CardContent>
       </Card>
+
+      <UserFormDialog
+        open={formOpen}
+        onClose={() => setFormOpen(false)}
+        onSuccess={handleFormSuccess}
+        user={selectedUser}
+      />
+
+      <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
+        <DialogTitle>Confirm Delete</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to delete user {userToDelete?.username}? This action cannot be undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDeleteDialogOpen(false)}>Cancel</Button>
+          <Button onClick={handleDeleteConfirm} color="error" variant="contained">
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </DashboardLayout>
   );
 }
