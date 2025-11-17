@@ -129,8 +129,15 @@ The application will be available at `http://localhost:3000`
 
 ### Frontend (.env.local)
 ```
+# Local development
 NEXT_PUBLIC_API_URL=http://localhost:8000/api
+
+# Production - Use HTTPS URL for API endpoint
+# The app will automatically convert HTTP to HTTPS when deployed on HTTPS
+# NEXT_PUBLIC_API_URL=https://your-backend-domain.com/api
 ```
+
+**Important**: When deploying to production (Vercel, etc.), ensure your `NEXT_PUBLIC_API_URL` uses `https://` protocol to avoid Mixed Content warnings. The application will automatically upgrade HTTP to HTTPS when running on an HTTPS site.
 
 ### Backend (environment variables)
 ```

@@ -26,6 +26,8 @@
    ```
    NEXT_PUBLIC_API_URL=https://your-backend-domain.com/api
    ```
+   
+   **Important**: Always use `https://` protocol for production API URLs to prevent Mixed Content errors. The application automatically upgrades HTTP to HTTPS when deployed on HTTPS sites, but it's best practice to configure HTTPS URLs directly.
 
 4. **Deploy**
    - Click "Deploy"
