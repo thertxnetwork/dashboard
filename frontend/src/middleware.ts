@@ -4,28 +4,17 @@ import type { NextRequest } from 'next/server';
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   
-  // Get token from cookie or local storage (we'll use a simple check)
-  const isAuthenticated = request.cookies.has('authenticated');
-  
-  // Protect dashboard routes
-  if (pathname.startsWith('/dashboard')) {
-    if (!isAuthenticated) {
-      return NextResponse.redirect(new URL('/login', request.url));
-    }
-  }
-  
-  // Redirect to dashboard if already logged in and trying to access login
+  // Allow access to login page
   if (pathname === '/login') {
-    if (isAuthenticated) {
-      return NextResponse.redirect(new URL('/dashboard', request.url));
-    }
+    return NextResponse.next();
   }
   
-  // Redirect root to dashboard
+  // Redirect root to login (client-side will redirect to dashboard if authenticated)
   if (pathname === '/') {
-    return NextResponse.redirect(new URL('/dashboard', request.url));
+    return NextResponse.next();
   }
   
+  // Allow all other routes (authentication is handled client-side)
   return NextResponse.next();
 }
 

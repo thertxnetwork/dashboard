@@ -16,16 +16,20 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [mode, setMode] = useState<'light' | 'dark'>('light');
 
   useEffect(() => {
-    const savedMode = localStorage.getItem('theme') as 'light' | 'dark';
-    if (savedMode) {
-      setMode(savedMode);
+    if (typeof window !== 'undefined') {
+      const savedMode = localStorage.getItem('theme') as 'light' | 'dark';
+      if (savedMode) {
+        setMode(savedMode);
+      }
     }
   }, []);
 
   const toggleTheme = () => {
     const newMode = mode === 'light' ? 'dark' : 'light';
     setMode(newMode);
-    localStorage.setItem('theme', newMode);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('theme', newMode);
+    }
   };
 
   const theme = useMemo(() => getTheme(mode), [mode]);

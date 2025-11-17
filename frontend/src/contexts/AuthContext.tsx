@@ -31,11 +31,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     // Check if user is logged in
-    const storedUser = localStorage.getItem('user');
-    const token = localStorage.getItem('access_token');
+    if (typeof window !== 'undefined') {
+      const storedUser = localStorage.getItem('user');
+      const token = localStorage.getItem('access_token');
 
-    if (storedUser && token) {
-      setUser(JSON.parse(storedUser));
+      if (storedUser && token) {
+        setUser(JSON.parse(storedUser));
+      }
     }
     setLoading(false);
   }, []);
@@ -60,15 +62,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const logout = () => {
-    const refreshToken = localStorage.getItem('refresh_token');
-    
-    if (refreshToken) {
-      apiClient.post('/auth/logout/', { refresh: refreshToken }).catch(() => {});
-    }
+    if (typeof window !== 'undefined') {
+      const refreshToken = localStorage.getItem('refresh_token');
+      
+      if (refreshToken) {
+        apiClient.post('/auth/logout/', { refresh: refreshToken }).catch(() => {});
+      }
 
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
-    localStorage.removeItem('user');
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('refresh_token');
+      localStorage.removeItem('user');
+    }
     setUser(null);
     router.push('/login');
   };

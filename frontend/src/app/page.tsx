@@ -9,11 +9,13 @@ export default function Home() {
 
   useEffect(() => {
     // Check if user is authenticated
-    const token = localStorage.getItem('access_token');
-    if (token) {
-      router.push('/dashboard');
-    } else {
-      router.push('/login');
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('access_token');
+      if (token) {
+        router.push('/dashboard');
+      } else {
+        router.push('/login');
+      }
     }
   }, [router]);
 
