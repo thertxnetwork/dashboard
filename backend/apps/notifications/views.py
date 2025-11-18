@@ -11,6 +11,17 @@ User = get_user_model()
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
+def unread_count(request):
+    """Get unread notification count for the current user"""
+    count = Notification.objects.filter(user=request.user, is_read=False).count()
+    return Response({
+        'success': True,
+        'unread_count': count
+    })
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def notification_list(request):
     """Get notifications for the current user"""
     notifications = Notification.objects.filter(user=request.user)

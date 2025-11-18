@@ -1,0 +1,3 @@
+from django.db import models
+
+# No models needed - this is a proxy to external API
