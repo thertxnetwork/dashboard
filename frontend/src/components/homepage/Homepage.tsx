@@ -145,14 +145,14 @@ export default function Homepage() {
       
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-slate-900/80 backdrop-blur-lg border-b border-white/10">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
           <motion.div 
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="flex items-center gap-2 text-2xl font-bold"
+            className="flex items-center gap-1.5 sm:gap-2 text-lg sm:text-2xl font-bold"
           >
-            <div className="bg-gradient-to-r from-blue-500 to-cyan-500 p-2 rounded-lg">
-              <Send className="w-6 h-6" />
+            <div className="bg-gradient-to-r from-blue-500 to-cyan-500 p-1.5 sm:p-2 rounded-lg">
+              <Send className="w-4 h-4 sm:w-6 sm:h-6" />
             </div>
             <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
               TheRtxNetwork
@@ -162,17 +162,17 @@ export default function Homepage() {
           <motion.div 
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="flex items-center gap-4"
+            className="flex items-center gap-2 sm:gap-4"
           >
             <button
               onClick={() => router.push('/login')}
-              className="px-6 py-2 text-white/80 hover:text-white transition-colors"
+              className="px-3 sm:px-6 py-1.5 sm:py-2 text-sm sm:text-base text-white/80 hover:text-white transition-colors"
             >
               Login
             </button>
             <button
               onClick={() => router.push('/dashboard')}
-              className="px-6 py-2 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-lg font-semibold hover:shadow-lg hover:shadow-blue-500/50 transition-all"
+              className="px-3 sm:px-6 py-1.5 sm:py-2 text-sm sm:text-base bg-gradient-to-r from-blue-600 to-cyan-600 rounded-lg font-semibold hover:shadow-lg hover:shadow-blue-500/50 transition-all"
             >
               Get Started
             </button>
