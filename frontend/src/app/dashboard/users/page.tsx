@@ -134,7 +134,7 @@ export default function UsersPage() {
       <Breadcrumbs items={[{ label: 'Users' }]} />
       
       <Card>
-        <CardContent>
+        <CardContent sx={{ overflow: 'hidden' }}>
           <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
             <Typography variant="h4" fontWeight={600}>User Management</Typography>
             <Button variant="contained" startIcon={<Plus size={18} />} onClick={handleAddUser}>
@@ -165,71 +165,72 @@ export default function UsersPage() {
             </Box>
           ) : (
             <>
-              <TableContainer sx={{ 
-                overflowX: 'auto',
-                '&::-webkit-scrollbar': {
-                  height: 8,
-                },
-                '&::-webkit-scrollbar-track': {
-                  backgroundColor: 'background.default',
-                  borderRadius: 4,
-                },
-                '&::-webkit-scrollbar-thumb': {
-                  backgroundColor: 'divider',
-                  borderRadius: 4,
-                  '&:hover': {
-                    backgroundColor: 'text.secondary',
+              <Box sx={{ width: '100%', overflowX: 'auto' }}>
+                <TableContainer sx={{ 
+                  '&::-webkit-scrollbar': {
+                    height: 8,
                   },
-                },
-              }}>
-                <Table sx={{ minWidth: 650 }}>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Username</TableCell>
-                      <TableCell>Email</TableCell>
-                      <TableCell>Name</TableCell>
-                      <TableCell>Role</TableCell>
-                      <TableCell>Status</TableCell>
-                      <TableCell>Created</TableCell>
-                      <TableCell align="right">Actions</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {users.map((user) => (
-                      <TableRow key={user.id} hover>
-                        <TableCell>{user.username}</TableCell>
-                        <TableCell>{user.email}</TableCell>
-                        <TableCell>{`${user.first_name} ${user.last_name}`}</TableCell>
-                        <TableCell>
-                          <Chip
-                            label={user.role}
-                            size="small"
-                            color={user.role === 'admin' ? 'primary' : 'default'}
-                          />
-                        </TableCell>
-                        <TableCell>
-                          <Chip
-                            label={user.is_active ? 'Active' : 'Inactive'}
-                            size="small"
-                            color={user.is_active ? 'success' : 'default'}
-                          />
-                        </TableCell>
-                        <TableCell>
-                          {new Date(user.created_at).toLocaleDateString()}
-                        </TableCell>
-                        <TableCell align="right">
-                          <IconButton size="small" color="primary" onClick={() => handleEditUser(user)}>
-                            <Edit size={16} />
-                          </IconButton>
-                          <IconButton size="small" color="error" onClick={() => handleDeleteClick(user)}>
-                            <Trash2 size={16} />
-                          </IconButton>
-                        </TableCell>
+                  '&::-webkit-scrollbar-track': {
+                    backgroundColor: 'background.default',
+                    borderRadius: 4,
+                  },
+                  '&::-webkit-scrollbar-thumb': {
+                    backgroundColor: 'divider',
+                    borderRadius: 4,
+                    '&:hover': {
+                      backgroundColor: 'text.secondary',
+                    },
+                  },
+                }}>
+                  <Table sx={{ minWidth: 650 }}>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Username</TableCell>
+                        <TableCell>Email</TableCell>
+                        <TableCell>Name</TableCell>
+                        <TableCell>Role</TableCell>
+                        <TableCell>Status</TableCell>
+                        <TableCell>Created</TableCell>
+                        <TableCell align="right">Actions</TableCell>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
+                    </TableHead>
+                    <TableBody>
+                      {users.map((user) => (
+                        <TableRow key={user.id} hover>
+                          <TableCell>{user.username}</TableCell>
+                          <TableCell>{user.email}</TableCell>
+                          <TableCell>{`${user.first_name} ${user.last_name}`}</TableCell>
+                          <TableCell>
+                            <Chip
+                              label={user.role}
+                              size="small"
+                              color={user.role === 'admin' ? 'primary' : 'default'}
+                            />
+                          </TableCell>
+                          <TableCell>
+                            <Chip
+                              label={user.is_active ? 'Active' : 'Inactive'}
+                              size="small"
+                              color={user.is_active ? 'success' : 'default'}
+                            />
+                          </TableCell>
+                          <TableCell>
+                            {new Date(user.created_at).toLocaleDateString()}
+                          </TableCell>
+                          <TableCell align="right">
+                            <IconButton size="small" color="primary" onClick={() => handleEditUser(user)}>
+                              <Edit size={16} />
+                            </IconButton>
+                            <IconButton size="small" color="error" onClick={() => handleDeleteClick(user)}>
+                              <Trash2 size={16} />
+                            </IconButton>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </Box>
 
               <TablePagination
                 rowsPerPageOptions={[5, 10, 25]}

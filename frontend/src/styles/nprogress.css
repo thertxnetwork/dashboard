@@ -25,13 +25,13 @@
   transform: rotate(3deg) translate(0px, -4px);
 }
 
-/* Small loading indicator at top left */
+/* Small loading indicator at top right */
 #nprogress .spinner {
   display: block;
   position: fixed;
   z-index: 9999;
   top: 12px;
-  left: 12px;
+  right: 12px;
 }
 
 #nprogress .spinner-icon {
