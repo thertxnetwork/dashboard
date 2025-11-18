@@ -325,7 +325,7 @@ export default function PhoneRegistryPage() {
           <TabPanel value={tabValue} index={1}>
             <Typography variant="h6" gutterBottom>Register Phone Number</Typography>
             <Grid container spacing={2} sx={{ maxWidth: 800 }}>
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <TextField
                   fullWidth
                   label="Phone Number*"
@@ -334,7 +334,7 @@ export default function PhoneRegistryPage() {
                   size="small"
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <TextField
                   fullWidth
                   label="Bot Name*"
@@ -343,7 +343,7 @@ export default function PhoneRegistryPage() {
                   size="small"
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <TextField
                   fullWidth
                   label="Country*"
@@ -352,7 +352,7 @@ export default function PhoneRegistryPage() {
                   size="small"
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <TextField
                   fullWidth
                   label="ISO2 Code*"
@@ -362,7 +362,7 @@ export default function PhoneRegistryPage() {
                   inputProps={{ maxLength: 2 }}
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <TextField
                   fullWidth
                   label="2FA Password*"
@@ -371,7 +371,7 @@ export default function PhoneRegistryPage() {
                   size="small"
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <TextField
                   fullWidth
                   label="Quality"
@@ -380,7 +380,7 @@ export default function PhoneRegistryPage() {
                   size="small"
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid size={{ xs: 12 }}>
                 <TextField
                   fullWidth
                   label="Session String*"
@@ -391,7 +391,7 @@ export default function PhoneRegistryPage() {
                   size="small"
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid size={{ xs: 12 }}>
                 <Button
                   variant="contained"
                   onClick={handleRegisterPhone}
@@ -551,26 +551,26 @@ export default function PhoneRegistryPage() {
 
             {analytics && (
               <Grid container spacing={3}>
-                <Grid item xs={12} md={4}>
+                <Grid size={{ xs: 12, md: 4 }}>
                   <Paper sx={{ p: 2 }}>
                     <Typography variant="h6" color="primary">{analytics.total_count}</Typography>
                     <Typography variant="body2" color="text.secondary">Total Phones</Typography>
                   </Paper>
                 </Grid>
-                <Grid item xs={12} md={4}>
+                <Grid size={{ xs: 12, md: 4 }}>
                   <Paper sx={{ p: 2 }}>
                     <Typography variant="h6" color="success.main">{analytics.individual_count}</Typography>
                     <Typography variant="body2" color="text.secondary">Individual</Typography>
                   </Paper>
                 </Grid>
-                <Grid item xs={12} md={4}>
+                <Grid size={{ xs: 12, md: 4 }}>
                   <Paper sx={{ p: 2 }}>
                     <Typography variant="h6" color="warning.main">{analytics.bulked_count}</Typography>
                     <Typography variant="body2" color="text.secondary">Bulked</Typography>
                   </Paper>
                 </Grid>
 
-                <Grid item xs={12}>
+                <Grid size={{ xs: 12 }}>
                   <Divider sx={{ my: 2 }} />
                   <Typography variant="h6" gutterBottom>By Country</Typography>
                   <Box display="flex" flexWrap="wrap" gap={1}>
@@ -580,7 +580,7 @@ export default function PhoneRegistryPage() {
                   </Box>
                 </Grid>
 
-                <Grid item xs={12}>
+                <Grid size={{ xs: 12 }}>
                   <Typography variant="h6" gutterBottom>By Bot Name</Typography>
                   <Box display="flex" flexWrap="wrap" gap={1}>
                     {Object.entries(analytics.by_botname || {}).map(([botname, count]: [string, any]) => (
@@ -589,7 +589,7 @@ export default function PhoneRegistryPage() {
                   </Box>
                 </Grid>
 
-                <Grid item xs={12}>
+                <Grid size={{ xs: 12 }}>
                   <Typography variant="h6" gutterBottom>By Quality</Typography>
                   <Box display="flex" flexWrap="wrap" gap={1}>
                     {Object.entries(analytics.by_quality || {}).map(([quality, count]: [string, any]) => (
@@ -685,7 +685,7 @@ export default function PhoneRegistryPage() {
                   </Alert>
 
                   <Grid container spacing={2} sx={{ mt: 2 }}>
-                    <Grid item xs={12} md={6}>
+                    <Grid size={{ xs: 12, md: 6 }}>
                       <Paper sx={{ p: 2 }}>
                         <Typography variant="subtitle2" gutterBottom>Indicators Found</Typography>
                         {Object.entries(spamResult.indicators_found || {}).map(([key, value]: [string, any]) => (
@@ -695,7 +695,7 @@ export default function PhoneRegistryPage() {
                         ))}
                       </Paper>
                     </Grid>
-                    <Grid item xs={12} md={6}>
+                    <Grid size={{ xs: 12, md: 6 }}>
                       <Paper sx={{ p: 2 }}>
                         <Typography variant="subtitle2" gutterBottom>Template Similarities</Typography>
                         {Object.entries(spamResult.template_similarities || {}).map(([key, value]: [string, any]) => (
