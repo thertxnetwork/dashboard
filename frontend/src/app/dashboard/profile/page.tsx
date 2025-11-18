@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import { Grid } from "@mui/material";
 import {
   Box,
   Card,
@@ -11,7 +12,6 @@ import {
   TextField,
   Button,
   Avatar,
-  Grid,
   Stack,
   Divider,
   CircularProgress,
@@ -127,7 +127,7 @@ export default function ProfilePage() {
       <Breadcrumbs items={[{ label: 'Profile' }]} />
       
       <Grid container spacing={3}>
-        <Grid item xs={12} md={4}>
+        <Grid size={{ xs: 12} md: {4}>
           <Card>
             <CardContent>
               <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
@@ -158,7 +158,7 @@ export default function ProfilePage() {
           </Card>
         </Grid>
 
-        <Grid item xs={12} md={8}>
+        <Grid size={{ xs: 12} md: {8}>
           <Stack spacing={3}>
             <Card>
               <CardContent>
@@ -170,7 +170,7 @@ export default function ProfilePage() {
                 </Typography>
                 
                 <Grid container spacing={2}>
-                  <Grid item xs={12} sm={6}>
+                  <Grid size={{ xs: 12} sm: {6}>
                     <TextField
                       fullWidth
                       label="First Name"
@@ -179,7 +179,7 @@ export default function ProfilePage() {
                       size="small"
                     />
                   </Grid>
-                  <Grid item xs={12} sm={6}>
+                  <Grid size={{ xs: 12} sm: {6}>
                     <TextField
                       fullWidth
                       label="Last Name"
@@ -188,7 +188,7 @@ export default function ProfilePage() {
                       size="small"
                     />
                   </Grid>
-                  <Grid item xs={12}>
+                  <Grid size={{ xs: 12}>
                     <TextField
                       fullWidth
                       label="Email"
@@ -198,7 +198,7 @@ export default function ProfilePage() {
                       type="email"
                     />
                   </Grid>
-                  <Grid item xs={12}>
+                  <Grid size={{ xs: 12}>
                     <TextField
                       fullWidth
                       label="Username"

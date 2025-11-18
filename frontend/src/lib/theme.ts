@@ -31,7 +31,7 @@ export const getTheme = (mode: 'light' | 'dark') => createTheme({
     },
   },
   typography: {
-    fontFamily: 'var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+    fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
     fontSize: 14,
     h1: {
       fontSize: '2rem',
