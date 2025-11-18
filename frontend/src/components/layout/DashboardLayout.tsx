@@ -299,6 +299,8 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           p: { xs: 2, sm: 3 },
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           mt: { xs: 7, sm: 8 },
+          overflowX: 'hidden',
+          maxWidth: '100%',
         }}
       >
         {children}

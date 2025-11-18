@@ -133,7 +133,7 @@ export default function UsersPage() {
     <DashboardLayout>
       <Breadcrumbs items={[{ label: 'Users' }]} />
       
-      <Card>
+      <Card sx={{ maxWidth: '100%', overflow: 'hidden' }}>
         <CardContent>
           <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
             <Typography variant="h4" fontWeight={600}>User Management</Typography>
@@ -165,25 +165,8 @@ export default function UsersPage() {
             </Box>
           ) : (
             <>
-              <TableContainer sx={{ 
-                overflowX: 'auto',
-                WebkitOverflowScrolling: 'touch',
-                '&::-webkit-scrollbar': {
-                  height: 8,
-                },
-                '&::-webkit-scrollbar-track': {
-                  backgroundColor: 'background.default',
-                  borderRadius: 4,
-                },
-                '&::-webkit-scrollbar-thumb': {
-                  backgroundColor: 'divider',
-                  borderRadius: 4,
-                  '&:hover': {
-                    backgroundColor: 'text.secondary',
-                  },
-                },
-              }}>
-                <Table sx={{ minWidth: 650 }}>
+              <Box sx={{ width: '100%', overflowX: 'auto', overflowY: 'visible' }}>
+                <Table sx={{ minWidth: 650, tableLayout: 'auto' }}>
                   <TableHead>
                     <TableRow>
                       <TableCell>Username</TableCell>
@@ -230,7 +213,7 @@ export default function UsersPage() {
                     ))}
                   </TableBody>
                 </Table>
-              </TableContainer>
+              </Box>
 
               <TablePagination
                 rowsPerPageOptions={[5, 10, 25]}

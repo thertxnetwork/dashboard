@@ -278,31 +278,14 @@ export default function SecurityPage() {
         </Grid>
       </Grid>
 
-      <Card>
+      <Card sx={{ maxWidth: '100%', overflow: 'hidden' }}>
         <CardContent>
           <Typography variant="h5" gutterBottom fontWeight={600} sx={{ mb: 3 }}>
             Recent Audit Logs
           </Typography>
           
-          <TableContainer sx={{ 
-            overflowX: 'auto',
-            WebkitOverflowScrolling: 'touch',
-            '&::-webkit-scrollbar': {
-              height: 8,
-            },
-            '&::-webkit-scrollbar-track': {
-              backgroundColor: 'background.default',
-              borderRadius: 4,
-            },
-            '&::-webkit-scrollbar-thumb': {
-              backgroundColor: 'divider',
-              borderRadius: 4,
-              '&:hover': {
-                backgroundColor: 'text.secondary',
-              },
-            },
-          }}>
-            <Table sx={{ minWidth: 800 }}>
+          <Box sx={{ width: '100%', overflowX: 'auto', overflowY: 'visible' }}>
+            <Table sx={{ minWidth: 800, tableLayout: 'auto' }}>
               <TableHead>
                 <TableRow>
                   <TableCell>Timestamp</TableCell>
@@ -343,7 +326,7 @@ export default function SecurityPage() {
                   ))}
               </TableBody>
             </Table>
-          </TableContainer>
+          </Box>
 
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
