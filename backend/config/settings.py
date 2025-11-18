@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'apps.security',
     'apps.monitoring',
     'apps.payments',
+    'phone_api',
 ]
 
 MIDDLEWARE = [

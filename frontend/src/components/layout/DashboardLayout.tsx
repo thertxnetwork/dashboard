@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Drawer,
@@ -36,10 +36,12 @@ import {
   LogOut,
   User as UserIcon,
   ChevronRight,
+  Phone,
 } from 'lucide-react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
+import apiClient from '@/lib/api';
 
 const drawerWidth = 240;
 
@@ -50,12 +52,15 @@ interface DashboardLayoutProps {
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [unreadCount, setUnreadCount] = useState(0);
   const router = useRouter();
   const pathname = usePathname();
   const { user, logout } = useAuth();
   const { mode, toggleTheme } = useTheme();
   const muiTheme = useMuiTheme();
   const isMobile = useMediaQuery(muiTheme.breakpoints.down('sm'));
+
+  const isAdmin = user?.is_staff || user?.is_superuser;
 
   const menuItems = [
     { text: 'Dashboard', icon: <Home size={18} />, path: '/dashboard' },
@@ -67,6 +72,36 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     { text: 'Monitoring', icon: <Activity size={18} />, path: '/dashboard/monitoring' },
     { text: 'Settings', icon: <Settings size={18} />, path: '/dashboard/settings' },
   ];
+
+  // Add Phone menu items for admins only
+  if (isAdmin) {
+    menuItems.splice(2, 0, 
+      { text: 'Phone Check', icon: <Phone size={18} />, path: '/dashboard/phone-check' },
+      { text: 'Bulk Register', icon: <Phone size={18} />, path: '/dashboard/phone-bulk' },
+      { text: 'Phone List', icon: <Phone size={18} />, path: '/dashboard/phone-list' },
+      { text: 'Phone Analytics', icon: <Phone size={18} />, path: '/dashboard/phone-analytics' }
+    );
+  }
+
+  // Fetch unread notification count
+  useEffect(() => {
+    const fetchUnreadCount = async () => {
+      try {
+        const response = await apiClient.get('/notifications/unread-count/');
+        if (response.data.success) {
+          setUnreadCount(response.data.unread_count);
+        }
+      } catch (error) {
+        console.error('Error fetching unread count:', error);
+      }
+    };
+
+    fetchUnreadCount();
+    
+    // Poll every 30 seconds
+    const interval = setInterval(fetchUnreadCount, 30000);
+    return () => clearInterval(interval);
+  }, []);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -212,7 +247,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             onClick={() => router.push('/dashboard/notifications')}
             sx={{ mr: 1 }}
           >
-            <Badge badgeContent={3} color="error">
+            <Badge badgeContent={unreadCount} color="error">
               <Bell size={18} />
             </Badge>
           </IconButton>

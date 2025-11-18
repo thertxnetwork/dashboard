@@ -27,6 +27,9 @@ import {
   Select,
   FormControl,
   InputLabel,
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
 } from '@mui/material';
 import { Bell, CheckCircle, AlertCircle, Info, Trash2, Send, CheckCheck } from 'lucide-react';
 import apiClient from '@/lib/api';
@@ -47,6 +50,9 @@ export default function NotificationsPage() {
   const [loading, setLoading] = useState(true);
   const [sendDialogOpen, setSendDialogOpen] = useState(false);
   const [sending, setSending] = useState(false);
+  const [users, setUsers] = useState<any[]>([]);
+  const [selectedUsers, setSelectedUsers] = useState<number[]>([]);
+  const [sendToAll, setSendToAll] = useState(true);
   const toast = useToast();
   const { user } = useAuth();
   
@@ -73,7 +79,21 @@ export default function NotificationsPage() {
 
   useEffect(() => {
     fetchNotifications();
+    if (isAdmin) {
+      fetchUsers();
+    }
   }, []);
+
+  const fetchUsers = async () => {
+    try {
+      const response = await apiClient.get('/users/');
+      if (response.data.success) {
+        setUsers(response.data.data || response.data.results || []);
+      }
+    } catch (error) {
+      console.error('Error fetching users:', error);
+    }
+  };
 
   const getIconByType = (type: string) => {
     switch (type) {
@@ -149,11 +169,24 @@ export default function NotificationsPage() {
 
     try {
       setSending(true);
-      const response = await apiClient.post('/notifications/send/', newNotification);
+      const payload: any = {
+        title: newNotification.title,
+        message: newNotification.message,
+        type: newNotification.type,
+      };
+
+      // Add user_ids only if not sending to all
+      if (!sendToAll && selectedUsers.length > 0) {
+        payload.user_ids = selectedUsers;
+      }
+
+      const response = await apiClient.post('/notifications/send/', payload);
       if (response.data.success) {
         toast.showSuccess(response.data.message);
         setSendDialogOpen(false);
         setNewNotification({ title: '', message: '', type: 'info' });
+        setSelectedUsers([]);
+        setSendToAll(true);
         fetchNotifications();
       }
     } catch (error: any) {
@@ -339,8 +372,57 @@ export default function NotificationsPage() {
                 <MenuItem value="error">Error</MenuItem>
               </Select>
             </FormControl>
+            
+            <Divider />
+            
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={sendToAll}
+                  onChange={(e) => {
+                    setSendToAll(e.target.checked);
+                    if (e.target.checked) {
+                      setSelectedUsers([]);
+                    }
+                  }}
+                />
+              }
+              label="Send to all users"
+            />
+            
+            {!sendToAll && (
+              <FormControl fullWidth size="small">
+                <InputLabel>Select Users</InputLabel>
+                <Select
+                  multiple
+                  value={selectedUsers}
+                  label="Select Users"
+                  onChange={(e) => setSelectedUsers(e.target.value as number[])}
+                  renderValue={(selected) => (
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                      {selected.map((value) => {
+                        const user = users.find((u) => u.id === value);
+                        return (
+                          <Chip key={value} label={user?.username || value} size="small" />
+                        );
+                      })}
+                    </Box>
+                  )}
+                >
+                  {users.map((user) => (
+                    <MenuItem key={user.id} value={user.id}>
+                      <Checkbox checked={selectedUsers.indexOf(user.id) > -1} />
+                      <ListItemText primary={`${user.username} (${user.email})`} />
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            )}
+            
             <Typography variant="caption" color="text.secondary">
-              This notification will be sent to all users
+              {sendToAll 
+                ? 'This notification will be sent to all users' 
+                : `Selected ${selectedUsers.length} user(s)`}
             </Typography>
           </Box>
         </DialogContent>
@@ -349,7 +431,7 @@ export default function NotificationsPage() {
           <Button
             variant="contained"
             onClick={handleSendNotification}
-            disabled={sending}
+            disabled={sending || (!sendToAll && selectedUsers.length === 0)}
             startIcon={sending ? <CircularProgress size={16} /> : <Send size={16} />}
           >
             Send
