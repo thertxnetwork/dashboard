@@ -19,7 +19,7 @@ function AnimatedSphere() {
     <Float speed={2} rotationIntensity={1} floatIntensity={2}>
       <Sphere ref={meshRef} args={[1, 100, 100]} scale={2.5}>
         <MeshDistortMaterial
-          color="#4F46E5"
+          color="#0088CC"
           attach="material"
           distort={0.4}
           speed={2}
@@ -45,7 +45,7 @@ function AnimatedTorus() {
     <Float speed={3} rotationIntensity={2} floatIntensity={1}>
       <mesh ref={torusRef} position={[-3, 1, -2]}>
         <torusGeometry args={[0.8, 0.3, 16, 100]} />
-        <meshStandardMaterial color="#8B5CF6" metalness={0.8} roughness={0.2} />
+        <meshStandardMaterial color="#229ED9" metalness={0.8} roughness={0.2} />
       </mesh>
     </Float>
   );
@@ -65,9 +65,34 @@ function AnimatedBox() {
     <Float speed={2.5} rotationIntensity={1.5} floatIntensity={1.5}>
       <mesh ref={boxRef} position={[3, -1, -1]}>
         <boxGeometry args={[1.2, 1.2, 1.2]} />
-        <meshStandardMaterial color="#06B6D4" metalness={0.8} roughness={0.2} />
+        <meshStandardMaterial color="#0088CC" metalness={0.8} roughness={0.2} />
       </mesh>
     </Float>
+  );
+}
+
+function BackgroundSquares() {
+  return (
+    <>
+      <Float speed={1.5} rotationIntensity={0.5} floatIntensity={1}>
+        <mesh position={[-4, -2, -3]}>
+          <boxGeometry args={[0.8, 0.8, 0.8]} />
+          <meshStandardMaterial color="#229ED9" wireframe transparent opacity={0.3} />
+        </mesh>
+      </Float>
+      <Float speed={2} rotationIntensity={0.8} floatIntensity={1.2}>
+        <mesh position={[4, 2, -4]}>
+          <boxGeometry args={[1, 1, 1]} />
+          <meshStandardMaterial color="#0088CC" wireframe transparent opacity={0.4} />
+        </mesh>
+      </Float>
+      <Float speed={1.8} rotationIntensity={0.6} floatIntensity={0.8}>
+        <mesh position={[0, -3, -2]}>
+          <boxGeometry args={[0.6, 0.6, 0.6]} />
+          <meshStandardMaterial color="#229ED9" wireframe transparent opacity={0.25} />
+        </mesh>
+      </Float>
+    </>
   );
 }
 
@@ -77,12 +102,13 @@ export default function Hero3D() {
       <Canvas camera={{ position: [0, 0, 5], fov: 75 }}>
         <ambientLight intensity={0.5} />
         <directionalLight position={[10, 10, 5]} intensity={1} />
-        <pointLight position={[-10, -10, -5]} intensity={0.5} color="#4F46E5" />
-        <pointLight position={[10, 10, 5]} intensity={0.5} color="#8B5CF6" />
+        <pointLight position={[-10, -10, -5]} intensity={0.5} color="#0088CC" />
+        <pointLight position={[10, 10, 5]} intensity={0.5} color="#229ED9" />
         
         <AnimatedSphere />
         <AnimatedTorus />
         <AnimatedBox />
+        <BackgroundSquares />
         
         <OrbitControls 
           enableZoom={false} 

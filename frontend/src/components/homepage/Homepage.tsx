@@ -133,7 +133,16 @@ export default function Homepage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white overflow-hidden relative">
+      {/* Square Background Pattern */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 left-10 w-32 h-32 border-2 border-blue-500/20 rotate-12"></div>
+        <div className="absolute top-40 right-20 w-24 h-24 border-2 border-blue-400/15 -rotate-6"></div>
+        <div className="absolute bottom-40 left-1/4 w-40 h-40 border-2 border-blue-500/10 rotate-45"></div>
+        <div className="absolute bottom-20 right-1/3 w-28 h-28 border-2 border-blue-400/20 -rotate-12"></div>
+        <div className="absolute top-1/3 right-10 w-36 h-36 border-2 border-blue-500/15 rotate-6"></div>
+      </div>
+      
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-slate-900/80 backdrop-blur-lg border-b border-white/10">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
@@ -142,10 +151,10 @@ export default function Homepage() {
             animate={{ opacity: 1, x: 0 }}
             className="flex items-center gap-2 text-2xl font-bold"
           >
-            <div className="bg-gradient-to-r from-purple-500 to-cyan-500 p-2 rounded-lg">
+            <div className="bg-gradient-to-r from-blue-500 to-cyan-500 p-2 rounded-lg">
               <Send className="w-6 h-6" />
             </div>
-            <span className="bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
               TheRtxNetwork
             </span>
           </motion.div>
@@ -163,7 +172,7 @@ export default function Homepage() {
             </button>
             <button
               onClick={() => router.push('/dashboard')}
-              className="px-6 py-2 bg-gradient-to-r from-purple-600 to-cyan-600 rounded-lg font-semibold hover:shadow-lg hover:shadow-purple-500/50 transition-all"
+              className="px-6 py-2 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-lg font-semibold hover:shadow-lg hover:shadow-blue-500/50 transition-all"
             >
               Get Started
             </button>
@@ -180,10 +189,10 @@ export default function Homepage() {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8 }}
-            className="mb-6 inline-flex items-center gap-2 px-4 py-2 bg-purple-500/20 backdrop-blur-sm rounded-full border border-purple-500/30"
+            className="mb-6 inline-flex items-center gap-2 px-4 py-2 bg-blue-500/20 backdrop-blur-sm rounded-full border border-blue-500/30"
           >
-            <Sparkles className="w-4 h-4 text-purple-400" />
-            <span className="text-purple-300 text-sm font-medium">AI-Powered Telegram Management</span>
+            <Sparkles className="w-4 h-4 text-blue-400" />
+            <span className="text-blue-300 text-sm font-medium">AI-Powered Telegram Management</span>
           </motion.div>
 
           <motion.h1
@@ -194,7 +203,7 @@ export default function Homepage() {
           >
             The Future of
             <br />
-            <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-500 bg-clip-text text-transparent">
               Telegram Business
             </span>
           </motion.h1>
@@ -217,7 +226,7 @@ export default function Homepage() {
           >
             <button
               onClick={() => router.push('/dashboard')}
-              className="group px-8 py-4 bg-gradient-to-r from-purple-600 to-cyan-600 rounded-xl font-semibold text-lg hover:shadow-2xl hover:shadow-purple-500/50 transition-all flex items-center gap-2"
+              className="group px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-xl font-semibold text-lg hover:shadow-2xl hover:shadow-blue-500/50 transition-all flex items-center gap-2"
             >
               Start Free Trial
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -242,7 +251,7 @@ export default function Homepage() {
               { value: '99.9%', label: 'Uptime' }
             ].map((stat, index) => (
               <div key={index} className="text-center">
-                <div className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
+                <div className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
                   {stat.value}
                 </div>
                 <div className="text-slate-400 text-sm mt-1">{stat.label}</div>
@@ -285,9 +294,9 @@ export default function Homepage() {
                 key={index}
                 variants={fadeInUp}
                 whileHover={{ scale: 1.05, y: -10 }}
-                className="group p-8 bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm rounded-2xl border border-white/10 hover:border-purple-500/50 transition-all cursor-pointer"
+                className="group p-8 bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm rounded-2xl border border-white/10 hover:border-blue-500/50 transition-all cursor-pointer"
               >
-                <div className="mb-4 text-purple-400 group-hover:text-cyan-400 transition-colors">
+                <div className="mb-4 text-blue-400 group-hover:text-cyan-400 transition-colors">
                   {feature.icon}
                 </div>
                 <h3 className="text-2xl font-bold mb-3">{feature.title}</h3>
@@ -299,7 +308,7 @@ export default function Homepage() {
       </section>
 
       {/* Pricing Section */}
-      <section className="relative py-32 px-6 bg-gradient-to-br from-purple-900/20 to-slate-900/20">
+      <section className="relative py-32 px-6 bg-gradient-to-br from-blue-900/20 to-slate-900/20">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial="initial"
@@ -330,12 +339,12 @@ export default function Homepage() {
                 whileHover={{ scale: 1.05, y: -10 }}
                 className={`relative p-8 rounded-2xl border transition-all ${
                   plan.popular
-                    ? 'bg-gradient-to-br from-purple-600/20 to-cyan-600/20 border-purple-500/50 shadow-xl shadow-purple-500/20'
+                    ? 'bg-gradient-to-br from-blue-600/20 to-cyan-600/20 border-blue-500/50 shadow-xl shadow-blue-500/20'
                     : 'bg-slate-800/50 border-white/10'
                 }`}
               >
                 {plan.popular && (
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-purple-600 to-cyan-600 rounded-full text-sm font-semibold">
+                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-full text-sm font-semibold">
                     Most Popular
                   </div>
                 )}
@@ -359,7 +368,7 @@ export default function Homepage() {
                   onClick={() => router.push('/dashboard')}
                   className={`w-full py-3 rounded-lg font-semibold transition-all ${
                     plan.popular
-                      ? 'bg-gradient-to-r from-purple-600 to-cyan-600 hover:shadow-lg hover:shadow-purple-500/50'
+                      ? 'bg-gradient-to-r from-blue-600 to-cyan-600 hover:shadow-lg hover:shadow-blue-500/50'
                       : 'bg-white/10 hover:bg-white/20'
                   }`}
                 >
@@ -429,7 +438,7 @@ export default function Homepage() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="p-12 bg-gradient-to-br from-purple-600/20 to-cyan-600/20 backdrop-blur-sm rounded-3xl border border-purple-500/30"
+            className="p-12 bg-gradient-to-br from-blue-600/20 to-cyan-600/20 backdrop-blur-sm rounded-3xl border border-blue-500/30"
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
               Ready to Transform Your Telegram Business?
@@ -439,7 +448,7 @@ export default function Homepage() {
             </p>
             <button
               onClick={() => router.push('/dashboard')}
-              className="group px-8 py-4 bg-gradient-to-r from-purple-600 to-cyan-600 rounded-xl font-semibold text-lg hover:shadow-2xl hover:shadow-purple-500/50 transition-all inline-flex items-center gap-2"
+              className="group px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-xl font-semibold text-lg hover:shadow-2xl hover:shadow-blue-500/50 transition-all inline-flex items-center gap-2"
             >
               Start Your Free Trial
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -454,7 +463,7 @@ export default function Homepage() {
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
               <div className="flex items-center gap-2 text-xl font-bold mb-4">
-                <div className="bg-gradient-to-r from-purple-500 to-cyan-500 p-2 rounded-lg">
+                <div className="bg-gradient-to-r from-blue-500 to-cyan-500 p-2 rounded-lg">
                   <Send className="w-5 h-5" />
                 </div>
                 <span>TheRtxNetwork</span>
