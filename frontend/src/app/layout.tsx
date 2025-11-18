@@ -7,8 +7,8 @@ import { ToastProvider } from "@/contexts/ToastContext";
 import RouteLoading from "@/components/RouteLoading";
 
 export const metadata: Metadata = {
-  title: "Admin Dashboard",
-  description: "Complete admin panel with Next.js and Django",
+  title: "TheRtxNetwork - Telegram Business Platform",
+  description: "Manage, automate, and scale your Telegram communications with our cutting-edge platform",
 };
 
 export default function RootLayout({
