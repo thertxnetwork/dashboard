@@ -279,71 +279,71 @@ export default function SecurityPage() {
       </Grid>
 
       <Card>
-        <CardContent sx={{ overflow: 'hidden' }}>
+        <CardContent>
           <Typography variant="h5" gutterBottom fontWeight={600} sx={{ mb: 3 }}>
             Recent Audit Logs
           </Typography>
           
-          <Box sx={{ width: '100%', overflowX: 'auto' }}>
-            <TableContainer sx={{ 
-              '&::-webkit-scrollbar': {
-                height: 8,
+          <TableContainer sx={{ 
+            overflowX: 'auto',
+            WebkitOverflowScrolling: 'touch',
+            '&::-webkit-scrollbar': {
+              height: 8,
+            },
+            '&::-webkit-scrollbar-track': {
+              backgroundColor: 'background.default',
+              borderRadius: 4,
+            },
+            '&::-webkit-scrollbar-thumb': {
+              backgroundColor: 'divider',
+              borderRadius: 4,
+              '&:hover': {
+                backgroundColor: 'text.secondary',
               },
-              '&::-webkit-scrollbar-track': {
-                backgroundColor: 'background.default',
-                borderRadius: 4,
-              },
-              '&::-webkit-scrollbar-thumb': {
-                backgroundColor: 'divider',
-                borderRadius: 4,
-                '&:hover': {
-                  backgroundColor: 'text.secondary',
-                },
-              },
-            }}>
-              <Table sx={{ minWidth: 800 }}>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Timestamp</TableCell>
-                    <TableCell>User</TableCell>
-                    <TableCell>Action</TableCell>
-                    <TableCell>Resource</TableCell>
-                    <TableCell>IP Address</TableCell>
-                    <TableCell>Status</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {auditLogs
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((log) => (
-                      <TableRow key={log.id} hover>
-                        <TableCell>{formatTimestamp(log.timestamp)}</TableCell>
-                        <TableCell>{log.user}</TableCell>
-                        <TableCell>{log.action}</TableCell>
-                        <TableCell>
-                          <Typography variant="body2" sx={{ fontFamily: 'monospace', fontSize: '0.8rem' }}>
-                            {log.resource}
-                          </Typography>
-                        </TableCell>
-                        <TableCell>
-                          <Typography variant="body2" sx={{ fontFamily: 'monospace', fontSize: '0.8rem' }}>
-                            {log.ip_address}
-                          </Typography>
-                        </TableCell>
-                        <TableCell>
-                          <Chip
-                            label={log.status}
-                            size="small"
-                            color={getStatusColor(log.status) as any}
-                            icon={getStatusIcon(log.status)}
-                          />
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Box>
+            },
+          }}>
+            <Table sx={{ minWidth: 800 }}>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Timestamp</TableCell>
+                  <TableCell>User</TableCell>
+                  <TableCell>Action</TableCell>
+                  <TableCell>Resource</TableCell>
+                  <TableCell>IP Address</TableCell>
+                  <TableCell>Status</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {auditLogs
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((log) => (
+                    <TableRow key={log.id} hover>
+                      <TableCell>{formatTimestamp(log.timestamp)}</TableCell>
+                      <TableCell>{log.user}</TableCell>
+                      <TableCell>{log.action}</TableCell>
+                      <TableCell>
+                        <Typography variant="body2" sx={{ fontFamily: 'monospace', fontSize: '0.8rem' }}>
+                          {log.resource}
+                        </Typography>
+                      </TableCell>
+                      <TableCell>
+                        <Typography variant="body2" sx={{ fontFamily: 'monospace', fontSize: '0.8rem' }}>
+                          {log.ip_address}
+                        </Typography>
+                      </TableCell>
+                      <TableCell>
+                        <Chip
+                          label={log.status}
+                          size="small"
+                          color={getStatusColor(log.status) as any}
+                          icon={getStatusIcon(log.status)}
+                        />
+                      </TableCell>
+                    </TableRow>
+                  ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
 
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
