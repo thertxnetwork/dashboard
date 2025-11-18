@@ -73,13 +73,14 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     { text: 'Settings', icon: <Settings size={18} />, path: '/dashboard/settings' },
   ];
 
-  // Add Phone Registry menu item for admins only
+  // Add Phone menu items for admins only
   if (isAdmin) {
-    menuItems.splice(2, 0, { 
-      text: 'Phone Registry', 
-      icon: <Phone size={18} />, 
-      path: '/dashboard/phone-registry' 
-    });
+    menuItems.splice(2, 0, 
+      { text: 'Phone Check', icon: <Phone size={18} />, path: '/dashboard/phone-check' },
+      { text: 'Bulk Register', icon: <Phone size={18} />, path: '/dashboard/phone-bulk' },
+      { text: 'Phone List', icon: <Phone size={18} />, path: '/dashboard/phone-list' },
+      { text: 'Phone Analytics', icon: <Phone size={18} />, path: '/dashboard/phone-analytics' }
+    );
   }
 
   // Fetch unread notification count
