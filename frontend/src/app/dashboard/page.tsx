@@ -107,12 +107,12 @@ export default function DashboardPage() {
       
       <Grid container spacing={3}>
         {/* Quran Ayat Card - Full Width */}
-        <Grid size={{ xs: 12}>
+        <Grid size={{ xs: 12 }}>
           <QuranAyatCard autoChangeInterval={30000} />
         </Grid>
 
         {kpiCards.map((card, index) => (
-          <Grid size={{ xs: 12, sm: 6, md: 3 }}} key={index}>
+          <Grid size={{ xs: 12, sm: 6, md: 3 }} key={index}>
             <Card>
               <CardContent>
                 <Box display="flex" justifyContent="space-between" alignItems="flex-start">
@@ -143,7 +143,7 @@ export default function DashboardPage() {
           </Grid>
         ))}
 
-        <Grid size={{ xs: 12} md: {8}>
+        <Grid size={{ xs: 12, md: 8 }}>
           <Card>
             <CardContent>
               <Typography variant="h5" gutterBottom fontWeight={600} sx={{ mb: 3 }}>
@@ -183,7 +183,7 @@ export default function DashboardPage() {
           </Card>
         </Grid>
 
-        <Grid size={{ xs: 12} md: {4}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <Card>
             <CardContent>
               <Typography variant="h5" gutterBottom fontWeight={600} sx={{ mb: 3 }}>

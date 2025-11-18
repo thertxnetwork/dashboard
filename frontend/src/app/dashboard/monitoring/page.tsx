@@ -135,7 +135,7 @@ export default function MonitoringPage() {
       </Box>
 
       <Grid container spacing={3}>
-        <Grid size={{ xs: 12, sm: 6, md: 3 }}}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <Card>
             <CardContent>
               <Box display="flex" alignItems="center" gap={2} mb={2}>
@@ -164,7 +164,7 @@ export default function MonitoringPage() {
           </Card>
         </Grid>
 
-        <Grid size={{ xs: 12, sm: 6, md: 3 }}}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <Card>
             <CardContent>
               <Box display="flex" alignItems="center" gap={2} mb={2}>
@@ -193,7 +193,7 @@ export default function MonitoringPage() {
           </Card>
         </Grid>
 
-        <Grid size={{ xs: 12, sm: 6, md: 3 }}}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <Card>
             <CardContent>
               <Box display="flex" alignItems="center" gap={2} mb={2}>
@@ -222,7 +222,7 @@ export default function MonitoringPage() {
           </Card>
         </Grid>
 
-        <Grid size={{ xs: 12, sm: 6, md: 3 }}}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <Card>
             <CardContent>
               <Box display="flex" alignItems="center" gap={2} mb={2}>
@@ -248,7 +248,7 @@ export default function MonitoringPage() {
           </Card>
         </Grid>
 
-        <Grid size={{ xs: 12}>
+        <Grid size={{ xs: 12 }}>
           <Card>
             <CardContent>
               <Typography variant="h5" gutterBottom fontWeight={600} sx={{ mb: 3 }}>
@@ -295,7 +295,7 @@ export default function MonitoringPage() {
           </Card>
         </Grid>
 
-        <Grid size={{ xs: 12} md: {6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Card>
             <CardContent>
               <Typography variant="h5" gutterBottom fontWeight={600} sx={{ mb: 2 }}>
@@ -327,7 +327,7 @@ export default function MonitoringPage() {
           </Card>
         </Grid>
 
-        <Grid size={{ xs: 12} md: {6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Card>
             <CardContent>
               <Typography variant="h5" gutterBottom fontWeight={600} sx={{ mb: 2 }}>
