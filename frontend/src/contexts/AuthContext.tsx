@@ -12,6 +12,8 @@ interface User {
   last_name: string;
   role: string;
   avatar?: string;
+  is_staff?: boolean;
+  is_superuser?: boolean;
 }
 
 interface AuthContextType {
@@ -19,6 +21,7 @@ interface AuthContextType {
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
+  setUser: (user: User | null) => void;
   isAuthenticated: boolean;
 }
 
@@ -84,6 +87,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         loading,
         login,
         logout,
+        setUser,
         isAuthenticated: !!user,
       }}
     >

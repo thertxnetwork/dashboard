@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
+import Breadcrumbs from '@/components/Breadcrumbs';
 import {
   Box,
   Card,
@@ -130,11 +131,13 @@ export default function UsersPage() {
 
   return (
     <DashboardLayout>
-      <Card>
+      <Breadcrumbs items={[{ label: 'Users' }]} />
+      
+      <Card sx={{ maxWidth: '100%', overflow: 'hidden' }}>
         <CardContent>
           <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-            <Typography variant="h3">User Management</Typography>
-            <Button variant="contained" startIcon={<Plus size={20} />} onClick={handleAddUser}>
+            <Typography variant="h4" fontWeight={600}>User Management</Typography>
+            <Button variant="contained" startIcon={<Plus size={18} />} onClick={handleAddUser}>
               Add User
             </Button>
           </Box>
@@ -148,7 +151,7 @@ export default function UsersPage() {
               size="small"
               fullWidth
               InputProps={{
-                startAdornment: <Search size={20} style={{ marginRight: 8 }} />,
+                startAdornment: <Search size={18} style={{ marginRight: 8, color: '#9ca3af' }} />,
               }}
             />
             <Button variant="outlined" onClick={handleSearch}>
@@ -162,8 +165,8 @@ export default function UsersPage() {
             </Box>
           ) : (
             <>
-              <TableContainer>
-                <Table>
+              <Box sx={{ width: '100%', overflowX: 'auto', overflowY: 'visible' }}>
+                <Table sx={{ minWidth: 650, tableLayout: 'auto' }}>
                   <TableHead>
                     <TableRow>
                       <TableCell>Username</TableCell>
@@ -177,7 +180,7 @@ export default function UsersPage() {
                   </TableHead>
                   <TableBody>
                     {users.map((user) => (
-                      <TableRow key={user.id}>
+                      <TableRow key={user.id} hover>
                         <TableCell>{user.username}</TableCell>
                         <TableCell>{user.email}</TableCell>
                         <TableCell>{`${user.first_name} ${user.last_name}`}</TableCell>
@@ -200,17 +203,17 @@ export default function UsersPage() {
                         </TableCell>
                         <TableCell align="right">
                           <IconButton size="small" color="primary" onClick={() => handleEditUser(user)}>
-                            <Edit size={18} />
+                            <Edit size={16} />
                           </IconButton>
                           <IconButton size="small" color="error" onClick={() => handleDeleteClick(user)}>
-                            <Trash2 size={18} />
+                            <Trash2 size={16} />
                           </IconButton>
                         </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
                 </Table>
-              </TableContainer>
+              </Box>
 
               <TablePagination
                 rowsPerPageOptions={[5, 10, 25]}

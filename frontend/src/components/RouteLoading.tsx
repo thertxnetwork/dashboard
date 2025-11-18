@@ -4,7 +4,7 @@ import { useEffect, Suspense } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import NProgress from 'nprogress';
 
-NProgress.configure({ showSpinner: false });
+NProgress.configure({ showSpinner: true });
 
 function RouteLoadingContent() {
   const pathname = usePathname();

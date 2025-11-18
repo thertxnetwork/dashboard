@@ -18,6 +18,8 @@ import {
   Menu,
   MenuItem,
   Avatar,
+  useMediaQuery,
+  useTheme as useMuiTheme,
 } from '@mui/material';
 import {
   Menu as MenuIcon,
@@ -32,12 +34,14 @@ import {
   Moon,
   Sun,
   LogOut,
+  User as UserIcon,
+  ChevronRight,
 } from 'lucide-react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
 
-const drawerWidth = 260;
+const drawerWidth = 240;
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -50,16 +54,18 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const pathname = usePathname();
   const { user, logout } = useAuth();
   const { mode, toggleTheme } = useTheme();
+  const muiTheme = useMuiTheme();
+  const isMobile = useMediaQuery(muiTheme.breakpoints.down('sm'));
 
   const menuItems = [
-    { text: 'Dashboard', icon: <Home size={20} />, path: '/dashboard' },
-    { text: 'Users', icon: <Users size={20} />, path: '/dashboard/users' },
-    { text: 'Database', icon: <Database size={20} />, path: '/dashboard/database' },
-    { text: 'Reports', icon: <FileText size={20} />, path: '/dashboard/reports' },
-    { text: 'Notifications', icon: <Bell size={20} />, path: '/dashboard/notifications' },
-    { text: 'Security', icon: <Shield size={20} />, path: '/dashboard/security' },
-    { text: 'Monitoring', icon: <Activity size={20} />, path: '/dashboard/monitoring' },
-    { text: 'Settings', icon: <Settings size={20} />, path: '/dashboard/settings' },
+    { text: 'Dashboard', icon: <Home size={18} />, path: '/dashboard' },
+    { text: 'Users', icon: <Users size={18} />, path: '/dashboard/users' },
+    { text: 'Database', icon: <Database size={18} />, path: '/dashboard/database' },
+    { text: 'Reports', icon: <FileText size={18} />, path: '/dashboard/reports' },
+    { text: 'Notifications', icon: <Bell size={18} />, path: '/dashboard/notifications' },
+    { text: 'Security', icon: <Shield size={18} />, path: '/dashboard/security' },
+    { text: 'Monitoring', icon: <Activity size={18} />, path: '/dashboard/monitoring' },
+    { text: 'Settings', icon: <Settings size={18} />, path: '/dashboard/settings' },
   ];
 
   const handleDrawerToggle = () => {
@@ -80,77 +86,179 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   };
 
   const drawer = (
-    <Box>
-      <Toolbar>
-        <Typography variant="h3" component="div">
-          Dashboard
-        </Typography>
+    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <Toolbar sx={{ borderBottom: 1, borderColor: 'divider', px: 2 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Box
+            sx={{
+              width: 32,
+              height: 32,
+              borderRadius: 1,
+              background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'white',
+              fontWeight: 700,
+              fontSize: '1rem',
+            }}
+          >
+            A
+          </Box>
+          <Typography variant="h5" component="div" sx={{ fontWeight: 700 }}>
+            Admin
+          </Typography>
+        </Box>
       </Toolbar>
-      <Divider />
-      <List>
-        {menuItems.map((item) => (
-          <ListItem key={item.text} disablePadding>
-            <ListItemButton
-              selected={pathname === item.path}
-              onClick={() => router.push(item.path)}
-            >
-              <ListItemIcon sx={{ minWidth: 40 }}>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
+      <List sx={{ flex: 1, px: 1.5, py: 2 }}>
+        {menuItems.map((item) => {
+          const isActive = pathname === item.path;
+          return (
+            <ListItem key={item.text} disablePadding sx={{ mb: 0.5 }}>
+              <ListItemButton
+                selected={isActive}
+                onClick={() => {
+                  router.push(item.path);
+                  if (isMobile) setMobileOpen(false);
+                }}
+                sx={{
+                  minHeight: 36,
+                  borderRadius: 1.5,
+                  px: 1.5,
+                  py: 1,
+                  '&.Mui-selected': {
+                    color: 'primary.main',
+                    fontWeight: 600,
+                  },
+                }}
+              >
+                <ListItemIcon sx={{ minWidth: 36, color: isActive ? 'primary.main' : 'text.secondary' }}>
+                  {item.icon}
+                </ListItemIcon>
+                <ListItemText 
+                  primary={item.text} 
+                  primaryTypographyProps={{ 
+                    fontSize: '0.875rem',
+                    fontWeight: isActive ? 600 : 400,
+                  }} 
+                />
+                {isActive && (
+                  <ChevronRight size={16} color={muiTheme.palette.primary.main} />
+                )}
+              </ListItemButton>
+            </ListItem>
+          );
+        })}
       </List>
+      <Divider />
+      <Box sx={{ p: 2 }}>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 1.5,
+            p: 1.5,
+            borderRadius: 2,
+            bgcolor: 'action.hover',
+            cursor: 'pointer',
+            '&:hover': {
+              bgcolor: 'action.selected',
+            },
+          }}
+          onClick={handleMenuOpen}
+        >
+          <Avatar sx={{ width: 32, height: 32, bgcolor: 'primary.main', fontSize: '0.875rem' }}>
+            {user?.first_name?.[0] || user?.email?.[0] || 'U'}
+          </Avatar>
+          <Box sx={{ flex: 1, minWidth: 0 }}>
+            <Typography variant="body2" fontWeight={600} noWrap>
+              {user?.first_name || 'User'}
+            </Typography>
+            <Typography variant="caption" color="text.secondary" noWrap>
+              {user?.email || ''}
+            </Typography>
+          </Box>
+        </Box>
+      </Box>
     </Box>
   );
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'background.default' }}>
       <AppBar
         position="fixed"
         sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
+          bgcolor: 'background.paper',
+          color: 'text.primary',
         }}
       >
-        <Toolbar>
+        <Toolbar sx={{ minHeight: { xs: 56, sm: 64 } }}>
           <IconButton
             color="inherit"
             edge="start"
             onClick={handleDrawerToggle}
             sx={{ mr: 2, display: { sm: 'none' } }}
           >
-            <MenuIcon />
+            <MenuIcon size={20} />
           </IconButton>
-          <Typography variant="h3" noWrap component="div" sx={{ flexGrow: 1 }}>
-            {menuItems.find((item) => item.path === pathname)?.text || 'Dashboard'}
-          </Typography>
-          <IconButton color="inherit" onClick={toggleTheme}>
-            {mode === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+          <Box sx={{ flexGrow: 1 }} />
+          <IconButton color="inherit" onClick={toggleTheme} sx={{ mr: 1 }}>
+            {mode === 'light' ? <Moon size={18} /> : <Sun size={18} />}
           </IconButton>
-          <IconButton color="inherit">
+          <IconButton 
+            color="inherit" 
+            onClick={() => router.push('/dashboard/notifications')}
+            sx={{ mr: 1 }}
+          >
             <Badge badgeContent={3} color="error">
-              <Bell size={20} />
+              <Bell size={18} />
             </Badge>
           </IconButton>
-          <IconButton onClick={handleMenuOpen}>
-            <Avatar sx={{ width: 32, height: 32 }}>
+          <IconButton onClick={handleMenuOpen} sx={{ p: 0.5 }}>
+            <Avatar sx={{ width: 32, height: 32, bgcolor: 'primary.main', fontSize: '0.875rem' }}>
               {user?.first_name?.[0] || user?.email?.[0] || 'U'}
             </Avatar>
           </IconButton>
-          <Menu
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={handleMenuClose}
-          >
-            <MenuItem onClick={() => { handleMenuClose(); router.push('/dashboard/settings'); }}>
-              <Settings size={16} style={{ marginRight: 8 }} /> Settings
-            </MenuItem>
-            <MenuItem onClick={handleLogout}>
-              <LogOut size={16} style={{ marginRight: 8 }} /> Logout
-            </MenuItem>
-          </Menu>
         </Toolbar>
       </AppBar>
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleMenuClose}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        slotProps={{
+          paper: {
+            sx: {
+              mt: 1,
+              minWidth: 200,
+            },
+          },
+        }}
+      >
+        <MenuItem 
+          onClick={() => { 
+            handleMenuClose(); 
+            router.push('/dashboard/profile'); 
+          }}
+        >
+          <UserIcon size={16} style={{ marginRight: 12 }} /> Profile
+        </MenuItem>
+        <MenuItem 
+          onClick={() => { 
+            handleMenuClose(); 
+            router.push('/dashboard/settings'); 
+          }}
+        >
+          <Settings size={16} style={{ marginRight: 12 }} /> Settings
+        </MenuItem>
+        <Divider />
+        <MenuItem onClick={handleLogout}>
+          <LogOut size={16} style={{ marginRight: 12 }} /> Logout
+        </MenuItem>
+      </Menu>
       <Box
         component="nav"
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
@@ -162,7 +270,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           ModalProps={{ keepMounted: true }}
           sx={{
             display: { xs: 'block', sm: 'none' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+            '& .MuiDrawer-paper': { 
+              boxSizing: 'border-box', 
+              width: drawerWidth,
+            },
           }}
         >
           {drawer}
@@ -171,7 +282,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           variant="permanent"
           sx={{
             display: { xs: 'none', sm: 'block' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+            '& .MuiDrawer-paper': { 
+              boxSizing: 'border-box', 
+              width: drawerWidth,
+            },
           }}
           open
         >
@@ -182,9 +296,11 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         component="main"
         sx={{
           flexGrow: 1,
-          p: 3,
+          p: { xs: 2, sm: 3 },
           width: { sm: `calc(100% - ${drawerWidth}px)` },
-          mt: 8,
+          mt: { xs: 7, sm: 8 },
+          overflowX: 'hidden',
+          maxWidth: '100%',
         }}
       >
         {children}
