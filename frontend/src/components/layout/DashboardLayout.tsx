@@ -40,6 +40,7 @@ import {
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useNotifications } from '@/contexts/NotificationContext';
 
 const drawerWidth = 240;
 
@@ -54,6 +55,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const pathname = usePathname();
   const { user, logout } = useAuth();
   const { mode, toggleTheme } = useTheme();
+  const { unreadCount } = useNotifications();
   const muiTheme = useMuiTheme();
   const isMobile = useMediaQuery(muiTheme.breakpoints.down('sm'));
 
@@ -212,7 +214,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             onClick={() => router.push('/dashboard/notifications')}
             sx={{ mr: 1 }}
           >
-            <Badge badgeContent={3} color="error">
+            <Badge badgeContent={unreadCount} color="error">
               <Bell size={18} />
             </Badge>
           </IconButton>

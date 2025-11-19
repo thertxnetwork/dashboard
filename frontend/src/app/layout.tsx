@@ -4,6 +4,7 @@ import "../styles/nprogress.css";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ToastProvider } from "@/contexts/ToastContext";
+import { NotificationProvider } from "@/contexts/NotificationContext";
 import RouteLoading from "@/components/RouteLoading";
 
 export const metadata: Metadata = {
@@ -27,8 +28,10 @@ export default function RootLayout({
         <ThemeProvider>
           <ToastProvider>
             <AuthProvider>
-              <RouteLoading />
-              {children}
+              <NotificationProvider>
+                <RouteLoading />
+                {children}
+              </NotificationProvider>
             </AuthProvider>
           </ToastProvider>
         </ThemeProvider>
