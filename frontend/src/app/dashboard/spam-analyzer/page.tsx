@@ -13,7 +13,7 @@ import {
   CircularProgress,
   Alert,
   Chip,
-  Grid,
+  
   Divider,
   LinearProgress,
 } from '@mui/material';
@@ -155,26 +155,26 @@ export default function SpamAnalyzerPage() {
                   />
                 </Box>
 
-                <Grid container spacing={3}>
-                  <Grid item xs={12} md={6}>
+                <Box display="flex" flexWrap="wrap" gap={2}>
+                  <Box flex="1" minWidth="100%">
                     <Typography variant="subtitle2" color="text.secondary" gutterBottom>
                       Detected Language
                     </Typography>
                     <Typography variant="body1" fontWeight={500}>
                       {result.detected_language.toUpperCase()}
                     </Typography>
-                  </Grid>
+                  </Box>
 
-                  <Grid item xs={12} md={6}>
+                  <Box flex="1" minWidth="100%">
                     <Typography variant="subtitle2" color="text.secondary" gutterBottom>
                       Message Length
                     </Typography>
                     <Typography variant="body1" fontWeight={500}>
                       {result.message_length} words
                     </Typography>
-                  </Grid>
+                  </Box>
 
-                  <Grid item xs={12} md={6}>
+                  <Box flex="1" minWidth="100%">
                     <Typography variant="subtitle2" color="text.secondary" gutterBottom>
                       Sentiment Polarity
                     </Typography>
@@ -189,9 +189,9 @@ export default function SpamAnalyzerPage() {
                         {result.sentiment_polarity.toFixed(2)}
                       </Typography>
                     </Box>
-                  </Grid>
+                  </Box>
 
-                  <Grid item xs={12}>
+                  <Box flex="1" minWidth="100%">
                     <Divider sx={{ my: 2 }} />
                     <Typography variant="subtitle2" color="text.secondary" gutterBottom>
                       Translated Text
@@ -204,16 +204,16 @@ export default function SpamAnalyzerPage() {
                     }}>
                       {result.translated_text}
                     </Typography>
-                  </Grid>
+                  </Box>
 
-                  <Grid item xs={12}>
+                  <Box flex="1" minWidth="100%">
                     <Divider sx={{ my: 2 }} />
                     <Typography variant="subtitle2" color="text.secondary" gutterBottom>
                       Indicators Found
                     </Typography>
-                    <Grid container spacing={2}>
+                    <Box display="flex" flexWrap="wrap" gap={2}>
                       {Object.entries(result.indicators_found).map(([key, value]) => (
-                        <Grid item xs={6} sm={3} key={key}>
+                        <Box flex="1" minWidth="200px" key={key}>
                           <Card variant="outlined">
                             <CardContent sx={{ textAlign: 'center' }}>
                               <Typography variant="caption" color="text.secondary">
@@ -224,19 +224,19 @@ export default function SpamAnalyzerPage() {
                               </Typography>
                             </CardContent>
                           </Card>
-                        </Grid>
+                        </Box>
                       ))}
-                    </Grid>
-                  </Grid>
+                    </Box>
+                  </Box>
 
-                  <Grid item xs={12}>
+                  <Box flex="1" minWidth="100%">
                     <Divider sx={{ my: 2 }} />
                     <Typography variant="subtitle2" color="text.secondary" gutterBottom>
                       Template Similarities
                     </Typography>
-                    <Grid container spacing={2}>
+                    <Box display="flex" flexWrap="wrap" gap={2}>
                       {Object.entries(result.template_similarities).map(([key, value]) => (
-                        <Grid item xs={6} sm={3} key={key}>
+                        <Box flex="1" minWidth="200px" key={key}>
                           <Box>
                             <Typography variant="caption" color="text.secondary">
                               {key.toUpperCase()}
@@ -250,11 +250,11 @@ export default function SpamAnalyzerPage() {
                               {(value * 100).toFixed(1)}%
                             </Typography>
                           </Box>
-                        </Grid>
+                        </Box>
                       ))}
-                    </Grid>
-                  </Grid>
-                </Grid>
+                    </Box>
+                  </Box>
+                </Box>
               </CardContent>
             </Card>
           )}

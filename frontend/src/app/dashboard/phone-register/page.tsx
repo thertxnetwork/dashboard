@@ -12,7 +12,7 @@ import {
   Box,
   CircularProgress,
   Alert,
-  Grid,
+  
 } from '@mui/material';
 import { UserPlus } from 'lucide-react';
 import apiClient from '@/lib/api';
@@ -113,8 +113,8 @@ export default function PhoneRegisterPage() {
           )}
 
           <form onSubmit={handleSubmit}>
-            <Grid container spacing={3}>
-              <Grid item xs={12} md={6}>
+            <Box display="flex" flexWrap="wrap" gap={2}>
+              <Box flex="1" minWidth="100%">
                 <TextField
                   fullWidth
                   required
@@ -126,8 +126,8 @@ export default function PhoneRegisterPage() {
                   helperText="Max 20 characters"
                   inputProps={{ maxLength: 20 }}
                 />
-              </Grid>
-              <Grid item xs={12} md={6}>
+              </Box>
+              <Box flex="1" minWidth="100%">
                 <TextField
                   fullWidth
                   required
@@ -139,8 +139,8 @@ export default function PhoneRegisterPage() {
                   helperText="Max 100 characters"
                   inputProps={{ maxLength: 100 }}
                 />
-              </Grid>
-              <Grid item xs={12} md={6}>
+              </Box>
+              <Box flex="1" minWidth="100%">
                 <TextField
                   fullWidth
                   required
@@ -152,8 +152,8 @@ export default function PhoneRegisterPage() {
                   helperText="Max 100 characters"
                   inputProps={{ maxLength: 100 }}
                 />
-              </Grid>
-              <Grid item xs={12} md={6}>
+              </Box>
+              <Box flex="1" minWidth="100%">
                 <TextField
                   fullWidth
                   required
@@ -165,8 +165,8 @@ export default function PhoneRegisterPage() {
                   helperText="2-character country code (auto-uppercased)"
                   inputProps={{ maxLength: 2 }}
                 />
-              </Grid>
-              <Grid item xs={12} md={6}>
+              </Box>
+              <Box flex="1" minWidth="100%">
                 <TextField
                   fullWidth
                   required
@@ -178,8 +178,8 @@ export default function PhoneRegisterPage() {
                   helperText="4 digits to long characters (max 1000)"
                   inputProps={{ maxLength: 1000 }}
                 />
-              </Grid>
-              <Grid item xs={12} md={6}>
+              </Box>
+              <Box flex="1" minWidth="100%">
                 <TextField
                   fullWidth
                   label="Quality"
@@ -190,8 +190,8 @@ export default function PhoneRegisterPage() {
                   helperText="Optional (max 50 characters)"
                   inputProps={{ maxLength: 50 }}
                 />
-              </Grid>
-              <Grid item xs={12}>
+              </Box>
+              <Box flex="1" minWidth="100%">
                 <TextField
                   fullWidth
                   required
@@ -205,8 +205,8 @@ export default function PhoneRegisterPage() {
                   helperText="Session string for authentication (max 10000 characters)"
                   inputProps={{ maxLength: 10000 }}
                 />
-              </Grid>
-              <Grid item xs={12}>
+              </Box>
+              <Box flex="1" minWidth="100%">
                 <Box display="flex" gap={2} justifyContent="flex-end">
                   <Button
                     type="button"
@@ -233,8 +233,8 @@ export default function PhoneRegisterPage() {
                     {loading ? 'Registering...' : 'Register Phone'}
                   </Button>
                 </Box>
-              </Grid>
-            </Grid>
+              </Box>
+            </Box>
           </form>
         </CardContent>
       </Card>

@@ -39,7 +39,7 @@ import {
   Phone,
   Search,
   UserPlus,
-  List,
+  List as ListIcon,
   BarChart,
   AlertTriangle,
 } from 'lucide-react';
@@ -78,7 +78,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     { text: 'Phone Check', icon: <Search size={18} />, path: '/dashboard/phone-check', adminOnly: true },
     { text: 'Phone Register', icon: <UserPlus size={18} />, path: '/dashboard/phone-register', adminOnly: true },
     { text: 'Phone Bulk', icon: <Users size={18} />, path: '/dashboard/phone-bulk', adminOnly: true },
-    { text: 'Phone List', icon: <List size={18} />, path: '/dashboard/phone-list', adminOnly: true },
+    { text: 'Phone List', icon: <ListIcon size={18} />, path: '/dashboard/phone-list', adminOnly: true },
     { text: 'Phone Analytics', icon: <BarChart size={18} />, path: '/dashboard/phone-analytics', adminOnly: true },
     { text: 'Spam Analyzer', icon: <AlertTriangle size={18} />, path: '/dashboard/spam-analyzer', adminOnly: true },
   ];

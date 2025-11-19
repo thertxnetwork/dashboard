@@ -23,7 +23,7 @@ import {
   Select,
   FormControl,
   InputLabel,
-  Grid,
+  
   Collapse,
   IconButton,
 } from '@mui/material';
@@ -148,8 +148,8 @@ export default function PhoneListPage() {
           <Collapse in={showFilters}>
             <Card variant="outlined" sx={{ mb: 3 }}>
               <CardContent>
-                <Grid container spacing={2}>
-                  <Grid item xs={12} sm={6} md={4}>
+                <Box display="flex" flexWrap="wrap" gap={2}>
+                  <Box flex="1" minWidth="200px">
                     <TextField
                       fullWidth
                       size="small"
@@ -157,8 +157,8 @@ export default function PhoneListPage() {
                       value={filters.botname}
                       onChange={(e) => handleFilterChange('botname', e.target.value)}
                     />
-                  </Grid>
-                  <Grid item xs={12} sm={6} md={4}>
+                  </Box>
+                  <Box flex="1" minWidth="200px">
                     <TextField
                       fullWidth
                       size="small"
@@ -166,8 +166,8 @@ export default function PhoneListPage() {
                       value={filters.country}
                       onChange={(e) => handleFilterChange('country', e.target.value)}
                     />
-                  </Grid>
-                  <Grid item xs={12} sm={6} md={4}>
+                  </Box>
+                  <Box flex="1" minWidth="200px">
                     <TextField
                       fullWidth
                       size="small"
@@ -176,8 +176,8 @@ export default function PhoneListPage() {
                       onChange={(e) => handleFilterChange('iso2', e.target.value.toUpperCase())}
                       inputProps={{ maxLength: 2 }}
                     />
-                  </Grid>
-                  <Grid item xs={12} sm={6} md={4}>
+                  </Box>
+                  <Box flex="1" minWidth="200px">
                     <TextField
                       fullWidth
                       size="small"
@@ -185,8 +185,8 @@ export default function PhoneListPage() {
                       value={filters.quality}
                       onChange={(e) => handleFilterChange('quality', e.target.value)}
                     />
-                  </Grid>
-                  <Grid item xs={12} sm={6} md={4}>
+                  </Box>
+                  <Box flex="1" minWidth="200px">
                     <FormControl fullWidth size="small">
                       <InputLabel>Bulk Status</InputLabel>
                       <Select
@@ -199,8 +199,8 @@ export default function PhoneListPage() {
                         <MenuItem value="false">Individual</MenuItem>
                       </Select>
                     </FormControl>
-                  </Grid>
-                  <Grid item xs={12} sm={6} md={4}>
+                  </Box>
+                  <Box flex="1" minWidth="200px">
                     <FormControl fullWidth size="small">
                       <InputLabel>Order By</InputLabel>
                       <Select
@@ -215,8 +215,8 @@ export default function PhoneListPage() {
                         <MenuItem value="quality">Quality</MenuItem>
                       </Select>
                     </FormControl>
-                  </Grid>
-                  <Grid item xs={12} sm={6} md={4}>
+                  </Box>
+                  <Box flex="1" minWidth="200px">
                     <FormControl fullWidth size="small">
                       <InputLabel>Direction</InputLabel>
                       <Select
@@ -228,18 +228,16 @@ export default function PhoneListPage() {
                         <MenuItem value="desc">Descending</MenuItem>
                       </Select>
                     </FormControl>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Box display="flex" gap={2}>
-                      <Button variant="contained" onClick={handleApplyFilters} startIcon={<Search size={18} />}>
-                        Apply Filters
-                      </Button>
-                      <Button variant="outlined" onClick={handleClearFilters}>
-                        Clear
-                      </Button>
-                    </Box>
-                  </Grid>
-                </Grid>
+                  </Box>
+                </Box>
+                <Box mt={2} display="flex" gap={2}>
+                  <Button variant="contained" onClick={handleApplyFilters} startIcon={<Search size={18} />}>
+                    Apply Filters
+                  </Button>
+                  <Button variant="outlined" onClick={handleClearFilters}>
+                    Clear
+                  </Button>
+                </Box>
               </CardContent>
             </Card>
           </Collapse>

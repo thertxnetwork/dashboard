@@ -8,7 +8,6 @@ import {
   Card,
   CardContent,
   Box,
-  Grid,
   CircularProgress,
   TextField,
   Button,
@@ -58,8 +57,8 @@ export default function PhoneAnalyticsPage() {
         <CardContent>
           <Typography variant="h4" fontWeight={600} mb={3}>Phone Registry Analytics</Typography>
           
-          <Grid container spacing={2} mb={3}>
-            <Grid item xs={12} sm={4}>
+          <Box display="flex" gap={2} mb={3} flexWrap="wrap">
+            <Box flex="1" minWidth="200px">
               <TextField
                 fullWidth
                 type="date"
@@ -69,8 +68,8 @@ export default function PhoneAnalyticsPage() {
                 InputLabelProps={{ shrink: true }}
                 size="small"
               />
-            </Grid>
-            <Grid item xs={12} sm={4}>
+            </Box>
+            <Box flex="1" minWidth="200px">
               <TextField
                 fullWidth
                 type="date"
@@ -80,8 +79,8 @@ export default function PhoneAnalyticsPage() {
                 InputLabelProps={{ shrink: true }}
                 size="small"
               />
-            </Grid>
-            <Grid item xs={12} sm={4}>
+            </Box>
+            <Box flex="1" minWidth="200px">
               <FormControl fullWidth size="small">
                 <InputLabel>Bulk Status</InputLabel>
                 <Select value={isBulked} label="Bulk Status" onChange={(e) => setIsBulked(e.target.value)}>
@@ -90,11 +89,11 @@ export default function PhoneAnalyticsPage() {
                   <MenuItem value="false">Individual</MenuItem>
                 </Select>
               </FormControl>
-            </Grid>
-            <Grid item xs={12}>
-              <Button variant="contained" onClick={fetchAnalytics}>Apply Filters</Button>
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
+          <Box mb={3}>
+            <Button variant="contained" onClick={fetchAnalytics}>Apply Filters</Button>
+          </Box>
         </CardContent>
       </Card>
 
@@ -103,96 +102,102 @@ export default function PhoneAnalyticsPage() {
           <CircularProgress />
         </Box>
       ) : analytics ? (
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={4}>
-            <Card>
-              <CardContent>
-                <Typography variant="subtitle2" color="text.secondary">Total Count</Typography>
-                <Typography variant="h3" fontWeight={600}>{analytics.total_count}</Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <Card>
-              <CardContent>
-                <Typography variant="subtitle2" color="text.secondary">Bulked</Typography>
-                <Typography variant="h3" fontWeight={600} color="warning.main">{analytics.bulked_count}</Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <Card>
-              <CardContent>
-                <Typography variant="subtitle2" color="text.secondary">Individual</Typography>
-                <Typography variant="h3" fontWeight={600} color="success.main">{analytics.individual_count}</Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-          
-          {analytics.by_country && Object.keys(analytics.by_country).length > 0 && (
-            <Grid item xs={12} md={6}>
+        <Box display="flex" flexDirection="column" gap={3}>
+          <Box display="flex" gap={3} flexWrap="wrap">
+            <Box flex="1" minWidth="250px">
               <Card>
                 <CardContent>
-                  <Typography variant="h6" fontWeight={600} mb={2}>By Country</Typography>
-                  {Object.entries(analytics.by_country).map(([country, count]: [string, any]) => (
-                    <Box key={country} display="flex" justifyContent="space-between" mb={1}>
-                      <Typography>{country}</Typography>
-                      <Typography fontWeight={600}>{count}</Typography>
-                    </Box>
-                  ))}
+                  <Typography variant="subtitle2" color="text.secondary">Total Count</Typography>
+                  <Typography variant="h3" fontWeight={600}>{analytics.total_count}</Typography>
                 </CardContent>
               </Card>
-            </Grid>
-          )}
-          
-          {analytics.by_botname && Object.keys(analytics.by_botname).length > 0 && (
-            <Grid item xs={12} md={6}>
+            </Box>
+            <Box flex="1" minWidth="250px">
               <Card>
                 <CardContent>
-                  <Typography variant="h6" fontWeight={600} mb={2}>By Bot Name</Typography>
-                  {Object.entries(analytics.by_botname).map(([botname, count]: [string, any]) => (
-                    <Box key={botname} display="flex" justifyContent="space-between" mb={1}>
-                      <Typography>{botname}</Typography>
-                      <Typography fontWeight={600}>{count}</Typography>
-                    </Box>
-                  ))}
+                  <Typography variant="subtitle2" color="text.secondary">Bulked</Typography>
+                  <Typography variant="h3" fontWeight={600} color="warning.main">{analytics.bulked_count}</Typography>
                 </CardContent>
               </Card>
-            </Grid>
-          )}
-          
-          {analytics.by_quality && Object.keys(analytics.by_quality).length > 0 && (
-            <Grid item xs={12} md={6}>
+            </Box>
+            <Box flex="1" minWidth="250px">
               <Card>
                 <CardContent>
-                  <Typography variant="h6" fontWeight={600} mb={2}>By Quality</Typography>
-                  {Object.entries(analytics.by_quality).map(([quality, count]: [string, any]) => (
-                    <Box key={quality} display="flex" justifyContent="space-between" mb={1}>
-                      <Typography>{quality}</Typography>
-                      <Typography fontWeight={600}>{count}</Typography>
-                    </Box>
-                  ))}
+                  <Typography variant="subtitle2" color="text.secondary">Individual</Typography>
+                  <Typography variant="h3" fontWeight={600} color="success.main">{analytics.individual_count}</Typography>
                 </CardContent>
               </Card>
-            </Grid>
-          )}
+            </Box>
+          </Box>
           
-          <Grid item xs={12} md={6}>
-            <Card>
-              <CardContent>
-                <Typography variant="h6" fontWeight={600} mb={2}>2FA Status</Typography>
-                <Box display="flex" justifyContent="space-between" mb={1}>
-                  <Typography>Enabled</Typography>
-                  <Typography fontWeight={600}>{analytics.twofa_enabled || 0}</Typography>
-                </Box>
-                <Box display="flex" justifyContent="space-between">
-                  <Typography>Disabled</Typography>
-                  <Typography fontWeight={600}>{analytics.twofa_disabled || 0}</Typography>
-                </Box>
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
+          <Box display="flex" gap={3} flexWrap="wrap">
+            {analytics.by_country && Object.keys(analytics.by_country).length > 0 && (
+              <Box flex="1" minWidth="300px">
+                <Card>
+                  <CardContent>
+                    <Typography variant="h6" fontWeight={600} mb={2}>By Country</Typography>
+                    {Object.entries(analytics.by_country).map(([country, count]: [string, any]) => (
+                      <Box key={country} display="flex" justifyContent="space-between" mb={1}>
+                        <Typography>{country}</Typography>
+                        <Typography fontWeight={600}>{count}</Typography>
+                      </Box>
+                    ))}
+                  </CardContent>
+                </Card>
+              </Box>
+            )}
+            
+            {analytics.by_botname && Object.keys(analytics.by_botname).length > 0 && (
+              <Box flex="1" minWidth="300px">
+                <Card>
+                  <CardContent>
+                    <Typography variant="h6" fontWeight={600} mb={2}>By Bot Name</Typography>
+                    {Object.entries(analytics.by_botname).map(([botname, count]: [string, any]) => (
+                      <Box key={botname} display="flex" justifyContent="space-between" mb={1}>
+                        <Typography>{botname}</Typography>
+                        <Typography fontWeight={600}>{count}</Typography>
+                      </Box>
+                    ))}
+                  </CardContent>
+                </Card>
+              </Box>
+            )}
+          </Box>
+          
+          <Box display="flex" gap={3} flexWrap="wrap">
+            {analytics.by_quality && Object.keys(analytics.by_quality).length > 0 && (
+              <Box flex="1" minWidth="300px">
+                <Card>
+                  <CardContent>
+                    <Typography variant="h6" fontWeight={600} mb={2}>By Quality</Typography>
+                    {Object.entries(analytics.by_quality).map(([quality, count]: [string, any]) => (
+                      <Box key={quality} display="flex" justifyContent="space-between" mb={1}>
+                        <Typography>{quality}</Typography>
+                        <Typography fontWeight={600}>{count}</Typography>
+                      </Box>
+                    ))}
+                  </CardContent>
+                </Card>
+              </Box>
+            )}
+            
+            <Box flex="1" minWidth="300px">
+              <Card>
+                <CardContent>
+                  <Typography variant="h6" fontWeight={600} mb={2}>2FA Status</Typography>
+                  <Box display="flex" justifyContent="space-between" mb={1}>
+                    <Typography>Enabled</Typography>
+                    <Typography fontWeight={600}>{analytics.twofa_enabled || 0}</Typography>
+                  </Box>
+                  <Box display="flex" justifyContent="space-between">
+                    <Typography>Disabled</Typography>
+                    <Typography fontWeight={600}>{analytics.twofa_disabled || 0}</Typography>
+                  </Box>
+                </CardContent>
+              </Card>
+            </Box>
+          </Box>
+        </Box>
       ) : null}
     </DashboardLayout>
   );
