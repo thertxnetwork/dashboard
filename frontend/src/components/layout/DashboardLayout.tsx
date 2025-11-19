@@ -36,6 +36,12 @@ import {
   LogOut,
   User as UserIcon,
   ChevronRight,
+  Phone,
+  Search,
+  UserPlus,
+  List,
+  BarChart,
+  AlertTriangle,
 } from 'lucide-react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
@@ -60,15 +66,26 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const isMobile = useMediaQuery(muiTheme.breakpoints.down('sm'));
 
   const menuItems = [
-    { text: 'Dashboard', icon: <Home size={18} />, path: '/dashboard' },
-    { text: 'Users', icon: <Users size={18} />, path: '/dashboard/users' },
-    { text: 'Database', icon: <Database size={18} />, path: '/dashboard/database' },
-    { text: 'Reports', icon: <FileText size={18} />, path: '/dashboard/reports' },
-    { text: 'Notifications', icon: <Bell size={18} />, path: '/dashboard/notifications' },
-    { text: 'Security', icon: <Shield size={18} />, path: '/dashboard/security' },
-    { text: 'Monitoring', icon: <Activity size={18} />, path: '/dashboard/monitoring' },
-    { text: 'Settings', icon: <Settings size={18} />, path: '/dashboard/settings' },
+    { text: 'Dashboard', icon: <Home size={18} />, path: '/dashboard', adminOnly: false },
+    { text: 'Users', icon: <Users size={18} />, path: '/dashboard/users', adminOnly: false },
+    { text: 'Database', icon: <Database size={18} />, path: '/dashboard/database', adminOnly: false },
+    { text: 'Reports', icon: <FileText size={18} />, path: '/dashboard/reports', adminOnly: false },
+    { text: 'Notifications', icon: <Bell size={18} />, path: '/dashboard/notifications', adminOnly: false },
+    { text: 'Security', icon: <Shield size={18} />, path: '/dashboard/security', adminOnly: false },
+    { text: 'Monitoring', icon: <Activity size={18} />, path: '/dashboard/monitoring', adminOnly: false },
+    { text: 'Settings', icon: <Settings size={18} />, path: '/dashboard/settings', adminOnly: false },
+    // Phone Registry menu items (Admin only)
+    { text: 'Phone Check', icon: <Search size={18} />, path: '/dashboard/phone-check', adminOnly: true },
+    { text: 'Phone Register', icon: <UserPlus size={18} />, path: '/dashboard/phone-register', adminOnly: true },
+    { text: 'Phone Bulk', icon: <Users size={18} />, path: '/dashboard/phone-bulk', adminOnly: true },
+    { text: 'Phone List', icon: <List size={18} />, path: '/dashboard/phone-list', adminOnly: true },
+    { text: 'Phone Analytics', icon: <BarChart size={18} />, path: '/dashboard/phone-analytics', adminOnly: true },
+    { text: 'Spam Analyzer', icon: <AlertTriangle size={18} />, path: '/dashboard/spam-analyzer', adminOnly: true },
   ];
+
+  // Filter menu items based on user role
+  const isAdmin = user?.is_staff || user?.is_superuser;
+  const filteredMenuItems = menuItems.filter(item => !item.adminOnly || isAdmin);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -113,7 +130,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         </Box>
       </Toolbar>
       <List sx={{ flex: 1, px: 1.5, py: 2 }}>
-        {menuItems.map((item) => {
+        {filteredMenuItems.map((item) => {
           const isActive = pathname === item.path;
           return (
             <ListItem key={item.text} disablePadding sx={{ mb: 0.5 }}>
