@@ -43,21 +43,46 @@ export default function LoginPage() {
         justifyContent: 'center',
         background: (theme) =>
           theme.palette.mode === 'light'
-            ? 'linear-gradient(135deg, #f5f7fa 0%, #e8eaf6 100%)'
-            : 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)',
+            ? 'linear-gradient(135deg, #F8F9F8 0%, #E8EBE9 100%)'
+            : 'linear-gradient(135deg, #0A1F1A 0%, #062D23 100%)',
       }}
     >
-      <Card sx={{ maxWidth: 400, width: '100%', mx: 2 }}>
-        <CardContent sx={{ p: 4 }}>
-          <Typography variant="h2" component="h1" gutterBottom textAlign="center">
-            Admin Dashboard
-          </Typography>
-          <Typography variant="body2" color="text.secondary" textAlign="center" mb={3}>
-            Sign in to your account
-          </Typography>
+      <Card sx={{ 
+        maxWidth: 440, 
+        width: '100%', 
+        mx: 2,
+      }}>
+        <CardContent sx={{ p: 5 }}>
+          <Box sx={{ textAlign: 'center', mb: 4 }}>
+            <Box
+              sx={{
+                width: 56,
+                height: 56,
+                borderRadius: 2,
+                background: 'linear-gradient(135deg, #0D5C47 0%, #10875F 100%)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: 'white',
+                fontWeight: 700,
+                fontSize: '1.5rem',
+                mx: 'auto',
+                mb: 2,
+                boxShadow: '0 4px 12px rgba(13, 92, 71, 0.3)',
+              }}
+            >
+              A
+            </Box>
+            <Typography variant="h2" component="h1" gutterBottom>
+              Admin Dashboard
+            </Typography>
+            <Typography variant="body1" color="text.secondary">
+              Sign in to your account
+            </Typography>
+          </Box>
 
           {error && (
-            <Alert severity="error" sx={{ mb: 2 }}>
+            <Alert severity="error" sx={{ mb: 3 }}>
               {error}
             </Alert>
           )}
@@ -73,6 +98,7 @@ export default function LoginPage() {
               required
               autoComplete="email"
               autoFocus
+              sx={{ mb: 2 }}
             />
             <TextField
               fullWidth
@@ -83,6 +109,7 @@ export default function LoginPage() {
               margin="normal"
               required
               autoComplete="current-password"
+              sx={{ mb: 3 }}
             />
             <Button
               fullWidth
@@ -90,9 +117,9 @@ export default function LoginPage() {
               variant="contained"
               size="large"
               disabled={loading}
-              sx={{ mt: 3 }}
+              sx={{ mt: 1 }}
             >
-              {loading ? <CircularProgress size={24} /> : 'Sign In'}
+              {loading ? <CircularProgress size={24} color="inherit" /> : 'Sign In'}
             </Button>
           </form>
         </CardContent>

@@ -48,7 +48,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useNotifications } from '@/contexts/NotificationContext';
 
-const drawerWidth = 240;
+const drawerWidth = 280;
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -67,24 +67,24 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
   const menuItems = [
     // Main section
-    { text: 'Dashboard', icon: <Home size={18} />, path: '/dashboard', adminOnly: false, section: 'main' },
-    { text: 'Users', icon: <Users size={18} />, path: '/dashboard/users', adminOnly: false, section: 'main' },
-    { text: 'Database', icon: <Database size={18} />, path: '/dashboard/database', adminOnly: false, section: 'main' },
-    { text: 'Reports', icon: <FileText size={18} />, path: '/dashboard/reports', adminOnly: false, section: 'main' },
-    { text: 'Notifications', icon: <Bell size={18} />, path: '/dashboard/notifications', adminOnly: false, section: 'main' },
+    { text: 'Dashboard', icon: <Home size={20} />, path: '/dashboard', adminOnly: false, section: 'main' },
+    { text: 'Users', icon: <Users size={20} />, path: '/dashboard/users', adminOnly: false, section: 'main' },
+    { text: 'Database', icon: <Database size={20} />, path: '/dashboard/database', adminOnly: false, section: 'main' },
+    { text: 'Reports', icon: <FileText size={20} />, path: '/dashboard/reports', adminOnly: false, section: 'main' },
+    { text: 'Notifications', icon: <Bell size={20} />, path: '/dashboard/notifications', adminOnly: false, section: 'main' },
     
     // Phone Registry section (Admin only)
-    { text: 'Phone Check', icon: <Search size={18} />, path: '/dashboard/phone-check', adminOnly: true, section: 'phone' },
-    { text: 'Phone Register', icon: <UserPlus size={18} />, path: '/dashboard/phone-register', adminOnly: true, section: 'phone' },
-    { text: 'Phone Bulk', icon: <Users size={18} />, path: '/dashboard/phone-bulk', adminOnly: true, section: 'phone' },
-    { text: 'Phone List', icon: <ListIcon size={18} />, path: '/dashboard/phone-list', adminOnly: true, section: 'phone' },
-    { text: 'Phone Analytics', icon: <BarChart size={18} />, path: '/dashboard/phone-analytics', adminOnly: true, section: 'phone' },
-    { text: 'Spam Analyzer', icon: <AlertTriangle size={18} />, path: '/dashboard/spam-analyzer', adminOnly: true, section: 'phone' },
+    { text: 'Phone Check', icon: <Search size={20} />, path: '/dashboard/phone-check', adminOnly: true, section: 'phone' },
+    { text: 'Phone Register', icon: <UserPlus size={20} />, path: '/dashboard/phone-register', adminOnly: true, section: 'phone' },
+    { text: 'Phone Bulk', icon: <Users size={20} />, path: '/dashboard/phone-bulk', adminOnly: true, section: 'phone' },
+    { text: 'Phone List', icon: <ListIcon size={20} />, path: '/dashboard/phone-list', adminOnly: true, section: 'phone' },
+    { text: 'Phone Analytics', icon: <BarChart size={20} />, path: '/dashboard/phone-analytics', adminOnly: true, section: 'phone' },
+    { text: 'Spam Analyzer', icon: <AlertTriangle size={20} />, path: '/dashboard/spam-analyzer', adminOnly: true, section: 'phone' },
     
     // System section
-    { text: 'Security', icon: <Shield size={18} />, path: '/dashboard/security', adminOnly: false, section: 'system' },
-    { text: 'Monitoring', icon: <Activity size={18} />, path: '/dashboard/monitoring', adminOnly: false, section: 'system' },
-    { text: 'Settings', icon: <Settings size={18} />, path: '/dashboard/settings', adminOnly: false, section: 'system' },
+    { text: 'Security', icon: <Shield size={20} />, path: '/dashboard/security', adminOnly: false, section: 'system' },
+    { text: 'Monitoring', icon: <Activity size={20} />, path: '/dashboard/monitoring', adminOnly: false, section: 'system' },
+    { text: 'Settings', icon: <Settings size={20} />, path: '/dashboard/settings', adminOnly: false, section: 'system' },
   ];
 
   // Filter menu items based on user role
@@ -121,20 +121,21 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
   const drawer = (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-      <Toolbar sx={{ borderBottom: 1, borderColor: 'divider', px: 2 }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+      <Toolbar sx={{ borderBottom: 1, borderColor: 'divider', px: 3, minHeight: '64px' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
           <Box
             sx={{
-              width: 32,
-              height: 32,
-              borderRadius: 1,
-              background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+              width: 36,
+              height: 36,
+              borderRadius: 1.5,
+              background: 'linear-gradient(135deg, #0D5C47 0%, #10875F 100%)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               color: 'white',
               fontWeight: 700,
-              fontSize: '1rem',
+              fontSize: '1.125rem',
+              boxShadow: '0 2px 8px rgba(13, 92, 71, 0.3)',
             }}
           >
             A
@@ -144,7 +145,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           </Typography>
         </Box>
       </Toolbar>
-      <List sx={{ flex: 1, px: 1.5, py: 2 }}>
+      <List sx={{ flex: 1, px: 2, py: 3 }}>
         {filteredMenuItems.map((item, index) => {
           const isActive = pathname === item.path;
           const prevItem = index > 0 ? filteredMenuItems[index - 1] : null;
@@ -153,21 +154,21 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           return (
             <React.Fragment key={item.text}>
               {showDivider && (
-                <Box sx={{ my: 1.5 }}>
+                <Box sx={{ my: 2 }}>
                   <Divider sx={{ opacity: 0.3 }} />
                   {item.section === 'phone' && (
                     <Typography 
                       variant="caption" 
                       sx={{ 
-                        px: 1.5, 
-                        py: 0.5, 
+                        px: 2, 
+                        py: 1, 
                         color: 'text.secondary',
                         fontSize: '0.7rem',
                         fontWeight: 600,
                         textTransform: 'uppercase',
                         letterSpacing: '0.05em',
                         display: 'block',
-                        mt: 1
+                        mt: 1.5
                       }}
                     >
                       Phone Registry
@@ -177,15 +178,15 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                     <Typography 
                       variant="caption" 
                       sx={{ 
-                        px: 1.5, 
-                        py: 0.5, 
+                        px: 2, 
+                        py: 1, 
                         color: 'text.secondary',
                         fontSize: '0.7rem',
                         fontWeight: 600,
                         textTransform: 'uppercase',
                         letterSpacing: '0.05em',
                         display: 'block',
-                        mt: 1
+                        mt: 1.5
                       }}
                     >
                       System
@@ -201,28 +202,29 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                     if (isMobile) setMobileOpen(false);
                   }}
                   sx={{
-                    minHeight: 36,
+                    minHeight: 44,
                     borderRadius: 1.5,
-                    px: 1.5,
-                    py: 1,
+                    px: 2,
+                    py: 1.25,
                     '&.Mui-selected': {
                       color: 'primary.main',
                       fontWeight: 600,
+                      backgroundColor: 'action.selected',
                     },
                   }}
                 >
-                  <ListItemIcon sx={{ minWidth: 36, color: isActive ? 'primary.main' : 'text.secondary' }}>
+                  <ListItemIcon sx={{ minWidth: 40, color: isActive ? 'primary.main' : 'text.secondary' }}>
                     {item.icon}
                   </ListItemIcon>
                   <ListItemText 
                     primary={item.text} 
                     primaryTypographyProps={{ 
-                      fontSize: '0.875rem',
+                      fontSize: '0.9375rem',
                       fontWeight: isActive ? 600 : 400,
                     }} 
                   />
                   {isActive && (
-                    <ChevronRight size={16} color={muiTheme.palette.primary.main} />
+                    <ChevronRight size={18} color={muiTheme.palette.primary.main} />
                   )}
                 </ListItemButton>
               </ListItem>
@@ -237,17 +239,19 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             display: 'flex',
             alignItems: 'center',
             gap: 1.5,
-            p: 1.5,
+            p: 2,
             borderRadius: 2,
             bgcolor: 'action.hover',
             cursor: 'pointer',
+            transition: 'all 200ms ease-in-out',
             '&:hover': {
               bgcolor: 'action.selected',
+              transform: 'scale(1.02)',
             },
           }}
           onClick={handleMenuOpen}
         >
-          <Avatar sx={{ width: 32, height: 32, bgcolor: 'primary.main', fontSize: '0.875rem' }}>
+          <Avatar sx={{ width: 36, height: 36, bgcolor: 'primary.main', fontSize: '0.9375rem' }}>
             {user?.first_name?.[0] || user?.email?.[0] || 'U'}
           </Avatar>
           <Box sx={{ flex: 1, minWidth: 0 }}>
@@ -285,7 +289,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           </IconButton>
           <Box sx={{ flexGrow: 1 }} />
           <IconButton color="inherit" onClick={toggleTheme} sx={{ mr: 1 }}>
-            {mode === 'light' ? <Moon size={18} /> : <Sun size={18} />}
+            {mode === 'light' ? <Moon size={20} /> : <Sun size={20} />}
           </IconButton>
           <IconButton 
             color="inherit" 
@@ -293,11 +297,11 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             sx={{ mr: 1 }}
           >
             <Badge badgeContent={unreadCount} color="error">
-              <Bell size={18} />
+              <Bell size={20} />
             </Badge>
           </IconButton>
           <IconButton onClick={handleMenuOpen} sx={{ p: 0.5 }}>
-            <Avatar sx={{ width: 32, height: 32, bgcolor: 'primary.main', fontSize: '0.875rem' }}>
+            <Avatar sx={{ width: 36, height: 36, bgcolor: 'primary.main', fontSize: '0.9375rem' }}>
               {user?.first_name?.[0] || user?.email?.[0] || 'U'}
             </Avatar>
           </IconButton>
@@ -376,7 +380,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         component="main"
         sx={{
           flexGrow: 1,
-          p: { xs: 2, sm: 3 },
+          p: { xs: 2, sm: 3, md: 4 },
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           mt: { xs: 7, sm: 8 },
           overflowX: 'hidden',
