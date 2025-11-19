@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Drawer,
@@ -86,6 +86,17 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   // Filter menu items based on user role
   const isAdmin = user?.is_staff || user?.is_superuser;
   const filteredMenuItems = menuItems.filter(item => !item.adminOnly || isAdmin);
+
+  // Debug logging for admin status
+  useEffect(() => {
+    if (user) {
+      console.log('User object:', user);
+      console.log('Is Admin:', isAdmin);
+      console.log('is_staff:', user.is_staff);
+      console.log('is_superuser:', user.is_superuser);
+      console.log('Filtered menu items count:', filteredMenuItems.length);
+    }
+  }, [user, isAdmin]);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
