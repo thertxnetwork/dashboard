@@ -13,38 +13,24 @@ cd backend
 python manage.py migrate
 ```
 
-### 2. Access Django Admin Panel
+### 2. Configure Check API via Settings Page
 
-1. Start your Django server (if not already running):
-   ```bash
-   python manage.py runserver
-   ```
+1. Start your application (if not already running)
 
-2. Open your browser and navigate to the Django admin panel:
-   ```
-   http://localhost:8000/admin/
-   ```
-   (or your production URL: `https://yourdomain.com/admin/`)
+2. Log in with an admin account (user must have `is_staff=True` or `is_superuser=True`)
 
-3. Log in with a superuser account
+3. Navigate to the **Settings** page: `/dashboard/settings`
 
-### 3. Configure Check API
+4. In the **Check API Configuration** section (visible only to admins), fill in:
+   - **Check API Base URL**: Enter the Check API base URL (e.g., `http://checkapi.org`)
+   - **API Key**: Enter your Check API key
+   - **Enable Check API**: Toggle to enable/disable the integration
 
-1. In the Django admin panel, look for **"Phone Registry"** section in the left sidebar
+5. Click **"Save Check API Config"**
 
-2. Click on **"Check API Configurations"**
+6. (Optional) Click **"Test Connection"** to verify the configuration works
 
-3. Click **"Add Check API Configuration"** button (top right)
-
-4. Fill in the configuration:
-   - **Name**: `default` (or any name you prefer)
-   - **API Key**: Enter your Check API key (e.g., `your-api-key-here`)
-   - **Base URL**: Enter the Check API base URL (e.g., `http://checkapi.org`)
-   - **Is Active**: ✓ (checked)
-
-5. Click **"Save"**
-
-### 4. Verify Configuration
+### 3. Verify Configuration
 
 The API is now configured. Admin users can access the phone registry features:
 - `/dashboard/phone-check` - Check phone numbers
@@ -54,50 +40,92 @@ The API is now configured. Admin users can access the phone registry features:
 - `/dashboard/phone-analytics` - View analytics
 - `/dashboard/spam-analyzer` - Analyze spam messages
 
+## Configuration UI Screenshot
+
+The Check API configuration is available at **Settings → Check API Configuration** (admin only):
+
+```
+┌──────────────────────────────────────────┐
+│ Check API Configuration                  │
+├──────────────────────────────────────────┤
+│ Configure the external Check API for     │
+│ phone registry management                │
+│                                          │
+│ Check API Base URL                       │
+│ ┌────────────────────────────────────┐  │
+│ │ http://checkapi.org                 │  │
+│ └────────────────────────────────────┘  │
+│ The base URL of the Check API service   │
+│                                          │
+│ API Key                                  │
+│ ┌────────────────────────────────────┐  │
+│ │ ••••••••••••••••••••••             │  │
+│ └────────────────────────────────────┘  │
+│ Your Check API authentication key       │
+│                                          │
+│ ☑ Enable Check API                     │
+│                                          │
+│ [Save Check API Config] [Test Connection]│
+└──────────────────────────────────────────┘
+```
+
 ## Configuration Fields Explained
 
 | Field | Description | Example |
 |-------|-------------|---------|
-| **Name** | Unique identifier for this configuration | `default`, `production`, `staging` |
+| **Check API Base URL** | The base URL of the Check API service | `http://checkapi.org` or `https://api.checkservice.com` |
 | **API Key** | Your Check API authentication key | `sk_live_abc123xyz456...` |
-| **Base URL** | The base URL of the Check API service | `http://checkapi.org` or `https://api.checkservice.com` |
-| **Is Active** | Whether this configuration is currently in use | ✓ (only one should be active) |
+| **Enable Check API** | Whether the Check API integration is active | ✓ (checked) |
 
-## Multiple Configurations
+## API Endpoints
 
-You can create multiple configurations (e.g., for development, staging, production), but only one should be marked as **Active** at a time. The system will use the active configuration for all API requests.
+The backend provides these REST API endpoints for configuration (admin only):
+
+- `GET /api/phone/config/` - Get current configuration
+- `POST /api/phone/config/update/` - Update configuration
+- `POST /api/phone/config/test/` - Test API connection
 
 ## Security Notes
 
 - ⚠️ Keep your API key secure and never commit it to version control
-- ⚠️ Only admin users (with `is_staff=True` or `is_superuser=True`) can access phone registry features
-- ⚠️ All phone registry API endpoints require admin authentication
+- ⚠️ Only admin users (with `is_staff=True` or `is_superuser=True`) can:
+  - View the Check API configuration section
+  - Update configuration
+  - Access phone registry features
+- ⚠️ API keys are masked in the UI after saving (only last 4 characters shown)
+- ⚠️ Configuration is stored encrypted in the database
 
 ## Troubleshooting
 
 ### "No active API configuration found" Error
 
 This error occurs when:
-1. No Check API Configuration exists in the database
-2. No configuration is marked as "Active"
+1. No Check API Configuration has been saved
+2. The configuration exists but "Enable Check API" is not checked
 
-**Solution**: Create a configuration in Django admin and ensure "Is Active" is checked.
+**Solution**: Go to Settings page and save the Check API configuration with "Enable Check API" checked.
 
-### Connection Errors
+### Connection Test Fails
 
-If you see connection errors:
+If the connection test fails:
 1. Verify the Base URL is correct and accessible
 2. Check that your API key is valid
 3. Ensure your server can reach the Check API service (check firewall/network settings)
+4. Check the error message for specific details
 
-## Environment Variables (Optional)
+### Settings Page Not Showing Check API Section
 
-For production deployments, you may want to store sensitive values in environment variables:
+This section is only visible to admin users. Ensure:
+1. You are logged in
+2. Your user account has `is_staff=True` or `is_superuser=True`
 
-```python
-# In settings.py or configuration
-CHECK_API_KEY = os.environ.get('CHECK_API_KEY')
-CHECK_API_BASE_URL = os.environ.get('CHECK_API_BASE_URL', 'http://checkapi.org')
-```
+## Multiple Environments
 
-Then create the configuration programmatically or via Django admin.
+For different environments (development, staging, production), you can:
+1. Use different Check API keys for each environment
+2. Update the configuration through the Settings page in each environment
+3. The configuration is stored per deployment/database
+
+## Alternative: Environment Variables (Advanced)
+
+For automated deployments, you can also pre-configure using environment variables and Django management commands. Contact your system administrator for details.

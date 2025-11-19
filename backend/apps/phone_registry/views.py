@@ -333,3 +333,145 @@ def analyze_spam(request):
             'success': False,
             'message': f'Error connecting to Check API: {str(e)}'
         }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated, IsAdminUser])
+def get_config(request):
+    """Get Check API configuration"""
+    try:
+        config = CheckAPIConfig.objects.filter(is_active=True).first()
+        if not config:
+            return Response({
+                'success': True,
+                'data': {
+                    'name': 'default',
+                    'base_url': '',
+                    'api_key': '',
+                    'is_active': False,
+                    'exists': False
+                }
+            })
+        
+        return Response({
+            'success': True,
+            'data': {
+                'id': config.id,
+                'name': config.name,
+                'base_url': config.base_url,
+                'api_key': '***' + config.api_key[-4:] if config.api_key and len(config.api_key) > 4 else '***',
+                'is_active': config.is_active,
+                'exists': True,
+                'created_at': config.created_at.isoformat(),
+                'updated_at': config.updated_at.isoformat(),
+            }
+        })
+    except Exception as e:
+        return Response({
+            'success': False,
+            'message': f'Error fetching configuration: {str(e)}'
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['PUT', 'POST'])
+@permission_classes([IsAuthenticated, IsAdminUser])
+def update_config(request):
+    """Update or create Check API configuration"""
+    try:
+        base_url = request.data.get('base_url', '').strip()
+        api_key = request.data.get('api_key', '').strip()
+        is_active = request.data.get('is_active', True)
+        
+        if not base_url:
+            return Response({
+                'success': False,
+                'message': 'Base URL is required'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        if not api_key:
+            return Response({
+                'success': False,
+                'message': 'API Key is required'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Get or create the default config
+        config, created = CheckAPIConfig.objects.get_or_create(
+            name='default',
+            defaults={
+                'base_url': base_url,
+                'api_key': api_key,
+                'is_active': is_active
+            }
+        )
+        
+        if not created:
+            # Update existing config
+            config.base_url = base_url
+            config.api_key = api_key
+            config.is_active = is_active
+            config.save()
+        
+        return Response({
+            'success': True,
+            'message': 'Configuration saved successfully',
+            'data': {
+                'id': config.id,
+                'name': config.name,
+                'base_url': config.base_url,
+                'is_active': config.is_active,
+            }
+        })
+    except Exception as e:
+        return Response({
+            'success': False,
+            'message': f'Error saving configuration: {str(e)}'
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated, IsAdminUser])
+def test_config(request):
+    """Test Check API connection"""
+    try:
+        config = CheckAPIConfig.objects.filter(is_active=True).first()
+        if not config:
+            return Response({
+                'success': False,
+                'message': 'No active configuration found. Please save configuration first.'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Try to make a simple request to the API
+        endpoint = f"{config.base_url}/api/phone/check"
+        headers = {
+            'X-API-Key': config.api_key,
+            'Content-Type': 'application/json'
+        }
+        
+        # Test with a dummy phone number
+        test_data = {'phone_number': '+1234567890'}
+        
+        # Run async request
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        response_status, response_data = loop.run_until_complete(
+            make_api_request('POST', endpoint, headers, data=test_data)
+        )
+        loop.close()
+        
+        # If we got any response (even if phone doesn't exist), connection works
+        if response_status < 500:
+            return Response({
+                'success': True,
+                'message': 'Connection successful! Check API is reachable.',
+            })
+        else:
+            return Response({
+                'success': False,
+                'message': f'Connection failed with status {response_status}'
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+    except Exception as e:
+        return Response({
+            'success': False,
+            'message': f'Connection test failed: {str(e)}'
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
