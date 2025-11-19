@@ -66,12 +66,20 @@ export default function UsersPage() {
         },
       });
 
+      console.log('Users API response:', response.data);
+
       if (response.data.success) {
-        setUsers(response.data.data || response.data.results || []);
-        setTotal(response.data.count || response.data.data?.length || 0);
+        const userData = response.data.data || response.data.results || [];
+        setUsers(userData);
+        setTotal(response.data.count || userData.length || 0);
+      } else if (response.data.results) {
+        // Handle DRF pagination format
+        setUsers(response.data.results);
+        setTotal(response.data.count || 0);
       }
     } catch (error) {
       console.error('Error fetching users:', error);
+      toast.showError('Failed to load users');
     } finally {
       setLoading(false);
     }

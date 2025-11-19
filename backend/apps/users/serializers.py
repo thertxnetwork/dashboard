@@ -9,14 +9,14 @@ class UserListSerializer(serializers.ModelSerializer):
     """Serializer for user list"""
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'role', 'is_active', 'created_at']
+        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'role', 'is_active', 'is_staff', 'is_superuser', 'created_at']
 
 
 class UserDetailSerializer(serializers.ModelSerializer):
     """Serializer for user detail"""
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'phone', 'role', 'avatar', 'is_active', 'created_at', 'updated_at']
+        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'phone', 'role', 'avatar', 'is_active', 'is_staff', 'is_superuser', 'created_at', 'updated_at']
         read_only_fields = ['id', 'created_at', 'updated_at']
 
 

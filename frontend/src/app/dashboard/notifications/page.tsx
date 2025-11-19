@@ -32,6 +32,7 @@ import { Bell, CheckCircle, AlertCircle, Info, Trash2, Send, CheckCheck } from '
 import apiClient from '@/lib/api';
 import { useToast } from '@/contexts/ToastContext';
 import { useAuth } from '@/contexts/AuthContext';
+import { useNotifications } from '@/contexts/NotificationContext';
 
 interface Notification {
   id: number;
@@ -47,13 +48,18 @@ export default function NotificationsPage() {
   const [loading, setLoading] = useState(true);
   const [sendDialogOpen, setSendDialogOpen] = useState(false);
   const [sending, setSending] = useState(false);
+  const [users, setUsers] = useState<any[]>([]);
+  const [loadingUsers, setLoadingUsers] = useState(false);
   const toast = useToast();
   const { user } = useAuth();
+  const { refreshUnreadCount } = useNotifications();
   
   const [newNotification, setNewNotification] = useState({
     title: '',
     message: '',
     type: 'info' as 'info' | 'success' | 'warning' | 'error',
+    sendTo: 'all' as 'all' | 'selected',
+    selectedUsers: [] as number[],
   });
 
   const fetchNotifications = async () => {
@@ -74,6 +80,20 @@ export default function NotificationsPage() {
   useEffect(() => {
     fetchNotifications();
   }, []);
+
+  const fetchUsers = async () => {
+    try {
+      setLoadingUsers(true);
+      const response = await apiClient.get('/users/');
+      if (response.data.success) {
+        setUsers(response.data.data || response.data.results || []);
+      }
+    } catch (error) {
+      console.error('Error fetching users:', error);
+    } finally {
+      setLoadingUsers(false);
+    }
+  };
 
   const getIconByType = (type: string) => {
     switch (type) {
@@ -121,6 +141,7 @@ export default function NotificationsPage() {
         setNotifications((prev) =>
           prev.map((n) => (n.id === id ? { ...n, is_read: true } : n))
         );
+        refreshUnreadCount();
       }
     } catch (error) {
       console.error('Error marking notification as read:', error);
@@ -133,6 +154,7 @@ export default function NotificationsPage() {
       const response = await apiClient.post('/notifications/mark-all-read/');
       if (response.data.success) {
         setNotifications((prev) => prev.map((n) => ({ ...n, is_read: true })));
+        refreshUnreadCount();
         toast.showSuccess('All notifications marked as read');
       }
     } catch (error) {
@@ -147,13 +169,34 @@ export default function NotificationsPage() {
       return;
     }
 
+    if (newNotification.sendTo === 'selected' && newNotification.selectedUsers.length === 0) {
+      toast.showError('Please select at least one user');
+      return;
+    }
+
     try {
       setSending(true);
-      const response = await apiClient.post('/notifications/send/', newNotification);
+      const payload: any = {
+        title: newNotification.title,
+        message: newNotification.message,
+        type: newNotification.type,
+      };
+
+      if (newNotification.sendTo === 'selected') {
+        payload.user_ids = newNotification.selectedUsers;
+      }
+
+      const response = await apiClient.post('/notifications/send/', payload);
       if (response.data.success) {
         toast.showSuccess(response.data.message);
         setSendDialogOpen(false);
-        setNewNotification({ title: '', message: '', type: 'info' });
+        setNewNotification({ 
+          title: '', 
+          message: '', 
+          type: 'info',
+          sendTo: 'all',
+          selectedUsers: [],
+        });
         fetchNotifications();
       }
     } catch (error: any) {
@@ -304,6 +347,7 @@ export default function NotificationsPage() {
       <Dialog 
         open={sendDialogOpen} 
         onClose={() => setSendDialogOpen(false)}
+        onTransitionEnter={fetchUsers}
         maxWidth="sm"
         fullWidth
       >
@@ -339,8 +383,50 @@ export default function NotificationsPage() {
                 <MenuItem value="error">Error</MenuItem>
               </Select>
             </FormControl>
+            <FormControl fullWidth size="small">
+              <InputLabel>Send To</InputLabel>
+              <Select
+                value={newNotification.sendTo}
+                label="Send To"
+                onChange={(e) => setNewNotification({ ...newNotification, sendTo: e.target.value as any, selectedUsers: [] })}
+              >
+                <MenuItem value="all">All Users</MenuItem>
+                <MenuItem value="selected">Selected Users</MenuItem>
+              </Select>
+            </FormControl>
+            {newNotification.sendTo === 'selected' && (
+              <FormControl fullWidth size="small">
+                <InputLabel>Select Users</InputLabel>
+                <Select
+                  multiple
+                  value={newNotification.selectedUsers}
+                  label="Select Users"
+                  onChange={(e) => setNewNotification({ ...newNotification, selectedUsers: e.target.value as number[] })}
+                  disabled={loadingUsers}
+                  renderValue={(selected) => {
+                    const selectedCount = (selected as number[]).length;
+                    return `${selectedCount} user${selectedCount !== 1 ? 's' : ''} selected`;
+                  }}
+                >
+                  {loadingUsers ? (
+                    <MenuItem disabled>
+                      <CircularProgress size={20} />
+                    </MenuItem>
+                  ) : (
+                    users.map((u) => (
+                      <MenuItem key={u.id} value={u.id}>
+                        {u.email} ({u.first_name} {u.last_name})
+                      </MenuItem>
+                    ))
+                  )}
+                </Select>
+              </FormControl>
+            )}
             <Typography variant="caption" color="text.secondary">
-              This notification will be sent to all users
+              {newNotification.sendTo === 'all' 
+                ? 'This notification will be sent to all users'
+                : `This notification will be sent to ${newNotification.selectedUsers.length} selected user(s)`
+              }
             </Typography>
           </Box>
         </DialogContent>
