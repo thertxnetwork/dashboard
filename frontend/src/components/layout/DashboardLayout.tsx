@@ -66,21 +66,25 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const isMobile = useMediaQuery(muiTheme.breakpoints.down('sm'));
 
   const menuItems = [
-    { text: 'Dashboard', icon: <Home size={18} />, path: '/dashboard', adminOnly: false },
-    { text: 'Users', icon: <Users size={18} />, path: '/dashboard/users', adminOnly: false },
-    { text: 'Database', icon: <Database size={18} />, path: '/dashboard/database', adminOnly: false },
-    { text: 'Reports', icon: <FileText size={18} />, path: '/dashboard/reports', adminOnly: false },
-    { text: 'Notifications', icon: <Bell size={18} />, path: '/dashboard/notifications', adminOnly: false },
-    { text: 'Security', icon: <Shield size={18} />, path: '/dashboard/security', adminOnly: false },
-    { text: 'Monitoring', icon: <Activity size={18} />, path: '/dashboard/monitoring', adminOnly: false },
-    { text: 'Settings', icon: <Settings size={18} />, path: '/dashboard/settings', adminOnly: false },
-    // Phone Registry menu items (Admin only)
-    { text: 'Phone Check', icon: <Search size={18} />, path: '/dashboard/phone-check', adminOnly: true },
-    { text: 'Phone Register', icon: <UserPlus size={18} />, path: '/dashboard/phone-register', adminOnly: true },
-    { text: 'Phone Bulk', icon: <Users size={18} />, path: '/dashboard/phone-bulk', adminOnly: true },
-    { text: 'Phone List', icon: <ListIcon size={18} />, path: '/dashboard/phone-list', adminOnly: true },
-    { text: 'Phone Analytics', icon: <BarChart size={18} />, path: '/dashboard/phone-analytics', adminOnly: true },
-    { text: 'Spam Analyzer', icon: <AlertTriangle size={18} />, path: '/dashboard/spam-analyzer', adminOnly: true },
+    // Main section
+    { text: 'Dashboard', icon: <Home size={18} />, path: '/dashboard', adminOnly: false, section: 'main' },
+    { text: 'Users', icon: <Users size={18} />, path: '/dashboard/users', adminOnly: false, section: 'main' },
+    { text: 'Database', icon: <Database size={18} />, path: '/dashboard/database', adminOnly: false, section: 'main' },
+    { text: 'Reports', icon: <FileText size={18} />, path: '/dashboard/reports', adminOnly: false, section: 'main' },
+    { text: 'Notifications', icon: <Bell size={18} />, path: '/dashboard/notifications', adminOnly: false, section: 'main' },
+    
+    // Phone Registry section (Admin only)
+    { text: 'Phone Check', icon: <Search size={18} />, path: '/dashboard/phone-check', adminOnly: true, section: 'phone' },
+    { text: 'Phone Register', icon: <UserPlus size={18} />, path: '/dashboard/phone-register', adminOnly: true, section: 'phone' },
+    { text: 'Phone Bulk', icon: <Users size={18} />, path: '/dashboard/phone-bulk', adminOnly: true, section: 'phone' },
+    { text: 'Phone List', icon: <ListIcon size={18} />, path: '/dashboard/phone-list', adminOnly: true, section: 'phone' },
+    { text: 'Phone Analytics', icon: <BarChart size={18} />, path: '/dashboard/phone-analytics', adminOnly: true, section: 'phone' },
+    { text: 'Spam Analyzer', icon: <AlertTriangle size={18} />, path: '/dashboard/spam-analyzer', adminOnly: true, section: 'phone' },
+    
+    // System section
+    { text: 'Security', icon: <Shield size={18} />, path: '/dashboard/security', adminOnly: false, section: 'system' },
+    { text: 'Monitoring', icon: <Activity size={18} />, path: '/dashboard/monitoring', adminOnly: false, section: 'system' },
+    { text: 'Settings', icon: <Settings size={18} />, path: '/dashboard/settings', adminOnly: false, section: 'system' },
   ];
 
   // Filter menu items based on user role
@@ -141,42 +145,88 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         </Box>
       </Toolbar>
       <List sx={{ flex: 1, px: 1.5, py: 2 }}>
-        {filteredMenuItems.map((item) => {
+        {filteredMenuItems.map((item, index) => {
           const isActive = pathname === item.path;
+          const prevItem = index > 0 ? filteredMenuItems[index - 1] : null;
+          const showDivider = prevItem && prevItem.section !== item.section;
+          
           return (
-            <ListItem key={item.text} disablePadding sx={{ mb: 0.5 }}>
-              <ListItemButton
-                selected={isActive}
-                onClick={() => {
-                  router.push(item.path);
-                  if (isMobile) setMobileOpen(false);
-                }}
-                sx={{
-                  minHeight: 36,
-                  borderRadius: 1.5,
-                  px: 1.5,
-                  py: 1,
-                  '&.Mui-selected': {
-                    color: 'primary.main',
-                    fontWeight: 600,
-                  },
-                }}
-              >
-                <ListItemIcon sx={{ minWidth: 36, color: isActive ? 'primary.main' : 'text.secondary' }}>
-                  {item.icon}
-                </ListItemIcon>
-                <ListItemText 
-                  primary={item.text} 
-                  primaryTypographyProps={{ 
-                    fontSize: '0.875rem',
-                    fontWeight: isActive ? 600 : 400,
-                  }} 
-                />
-                {isActive && (
-                  <ChevronRight size={16} color={muiTheme.palette.primary.main} />
-                )}
-              </ListItemButton>
-            </ListItem>
+            <React.Fragment key={item.text}>
+              {showDivider && (
+                <Box sx={{ my: 1.5 }}>
+                  <Divider sx={{ opacity: 0.3 }} />
+                  {item.section === 'phone' && (
+                    <Typography 
+                      variant="caption" 
+                      sx={{ 
+                        px: 1.5, 
+                        py: 0.5, 
+                        color: 'text.secondary',
+                        fontSize: '0.7rem',
+                        fontWeight: 600,
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em',
+                        display: 'block',
+                        mt: 1
+                      }}
+                    >
+                      Phone Registry
+                    </Typography>
+                  )}
+                  {item.section === 'system' && (
+                    <Typography 
+                      variant="caption" 
+                      sx={{ 
+                        px: 1.5, 
+                        py: 0.5, 
+                        color: 'text.secondary',
+                        fontSize: '0.7rem',
+                        fontWeight: 600,
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em',
+                        display: 'block',
+                        mt: 1
+                      }}
+                    >
+                      System
+                    </Typography>
+                  )}
+                </Box>
+              )}
+              <ListItem disablePadding sx={{ mb: 0.5 }}>
+                <ListItemButton
+                  selected={isActive}
+                  onClick={() => {
+                    router.push(item.path);
+                    if (isMobile) setMobileOpen(false);
+                  }}
+                  sx={{
+                    minHeight: 36,
+                    borderRadius: 1.5,
+                    px: 1.5,
+                    py: 1,
+                    '&.Mui-selected': {
+                      color: 'primary.main',
+                      fontWeight: 600,
+                    },
+                  }}
+                >
+                  <ListItemIcon sx={{ minWidth: 36, color: isActive ? 'primary.main' : 'text.secondary' }}>
+                    {item.icon}
+                  </ListItemIcon>
+                  <ListItemText 
+                    primary={item.text} 
+                    primaryTypographyProps={{ 
+                      fontSize: '0.875rem',
+                      fontWeight: isActive ? 600 : 400,
+                    }} 
+                  />
+                  {isActive && (
+                    <ChevronRight size={16} color={muiTheme.palette.primary.main} />
+                  )}
+                </ListItemButton>
+              </ListItem>
+            </React.Fragment>
           );
         })}
       </List>

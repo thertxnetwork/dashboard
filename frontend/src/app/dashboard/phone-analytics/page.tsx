@@ -15,10 +15,14 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Paper,
 } from '@mui/material';
-import { BarChart, PieChart } from 'lucide-react';
+import { TrendingUp, TrendingDown, Users as UsersIcon, Package } from 'lucide-react';
+import { BarChart, Bar, PieChart, Pie, Cell, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import apiClient from '@/lib/api';
 import { useToast } from '@/contexts/ToastContext';
+
+const COLORS = ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#06b6d4', '#14b8a6'];
 
 export default function PhoneAnalyticsPage() {
   const [loading, setLoading] = useState(false);
@@ -49,15 +53,52 @@ export default function PhoneAnalyticsPage() {
     fetchAnalytics();
   }, []);
 
+  // Prepare chart data
+  const countryData = analytics?.by_country ? Object.entries(analytics.by_country).map(([name, value]) => ({
+    name,
+    value: value as number
+  })).sort((a, b) => b.value - a.value).slice(0, 10) : [];
+
+  const botnameData = analytics?.by_botname ? Object.entries(analytics.by_botname).map(([name, value]) => ({
+    name,
+    value: value as number
+  })).sort((a, b) => b.value - a.value).slice(0, 10) : [];
+
+  const qualityData = analytics?.by_quality ? Object.entries(analytics.by_quality).map(([name, value]) => ({
+    name: name.charAt(0).toUpperCase() + name.slice(1),
+    value: value as number
+  })) : [];
+
+  const distributionData = analytics ? [
+    { name: 'Individual', value: analytics.individual_count || 0, color: '#10b981' },
+    { name: 'Bulked', value: analytics.bulked_count || 0, color: '#f59e0b' },
+  ] : [];
+
+  const twofaData = analytics ? [
+    { name: '2FA Enabled', value: analytics.twofa_enabled || 0, color: '#10b981' },
+    { name: '2FA Disabled', value: analytics.twofa_disabled || 0, color: '#ef4444' },
+  ] : [];
+
   return (
     <DashboardLayout>
       <Breadcrumbs items={[{ label: 'Phone Registry' }, { label: 'Analytics' }]} />
       
+      <Box mb={3}>
+        <Typography variant="h4" fontWeight={600} gutterBottom>
+          Phone Registry Analytics
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          Comprehensive statistics and insights for phone number registry
+        </Typography>
+      </Box>
+
+      {/* Filters */}
       <Card sx={{ mb: 3 }}>
         <CardContent>
-          <Typography variant="h4" fontWeight={600} mb={3}>Phone Registry Analytics</Typography>
-          
-          <Box display="flex" gap={2} mb={3} flexWrap="wrap">
+          <Typography variant="h6" fontWeight={600} gutterBottom>
+            Filters
+          </Typography>
+          <Box display="flex" gap={2} flexWrap="wrap" alignItems="flex-end">
             <Box flex="1" minWidth="200px">
               <TextField
                 fullWidth
@@ -90,114 +131,220 @@ export default function PhoneAnalyticsPage() {
                 </Select>
               </FormControl>
             </Box>
-          </Box>
-          <Box mb={3}>
-            <Button variant="contained" onClick={fetchAnalytics}>Apply Filters</Button>
+            <Button variant="contained" onClick={fetchAnalytics} disabled={loading} sx={{ height: 40 }}>
+              {loading ? <CircularProgress size={20} /> : 'Apply'}
+            </Button>
           </Box>
         </CardContent>
       </Card>
 
-      {loading ? (
+      {loading && !analytics ? (
         <Box display="flex" justifyContent="center" p={4}>
           <CircularProgress />
         </Box>
       ) : analytics ? (
-        <Box display="flex" flexDirection="column" gap={3}>
-          <Box display="flex" gap={3} flexWrap="wrap">
-            <Box flex="1" minWidth="250px">
-              <Card>
-                <CardContent>
-                  <Typography variant="subtitle2" color="text.secondary">Total Count</Typography>
-                  <Typography variant="h3" fontWeight={600}>{analytics.total_count}</Typography>
-                </CardContent>
-              </Card>
-            </Box>
-            <Box flex="1" minWidth="250px">
-              <Card>
-                <CardContent>
-                  <Typography variant="subtitle2" color="text.secondary">Bulked</Typography>
-                  <Typography variant="h3" fontWeight={600} color="warning.main">{analytics.bulked_count}</Typography>
-                </CardContent>
-              </Card>
-            </Box>
-            <Box flex="1" minWidth="250px">
-              <Card>
-                <CardContent>
-                  <Typography variant="subtitle2" color="text.secondary">Individual</Typography>
-                  <Typography variant="h3" fontWeight={600} color="success.main">{analytics.individual_count}</Typography>
-                </CardContent>
-              </Card>
-            </Box>
-          </Box>
-          
-          <Box display="flex" gap={3} flexWrap="wrap">
-            {analytics.by_country && Object.keys(analytics.by_country).length > 0 && (
-              <Box flex="1" minWidth="300px">
-                <Card>
-                  <CardContent>
-                    <Typography variant="h6" fontWeight={600} mb={2}>By Country</Typography>
-                    {Object.entries(analytics.by_country).map(([country, count]: [string, any]) => (
-                      <Box key={country} display="flex" justifyContent="space-between" mb={1}>
-                        <Typography>{country}</Typography>
-                        <Typography fontWeight={600}>{count}</Typography>
-                      </Box>
-                    ))}
-                  </CardContent>
-                </Card>
-              </Box>
-            )}
-            
-            {analytics.by_botname && Object.keys(analytics.by_botname).length > 0 && (
-              <Box flex="1" minWidth="300px">
-                <Card>
-                  <CardContent>
-                    <Typography variant="h6" fontWeight={600} mb={2}>By Bot Name</Typography>
-                    {Object.entries(analytics.by_botname).map(([botname, count]: [string, any]) => (
-                      <Box key={botname} display="flex" justifyContent="space-between" mb={1}>
-                        <Typography>{botname}</Typography>
-                        <Typography fontWeight={600}>{count}</Typography>
-                      </Box>
-                    ))}
-                  </CardContent>
-                </Card>
-              </Box>
-            )}
-          </Box>
-          
-          <Box display="flex" gap={3} flexWrap="wrap">
-            {analytics.by_quality && Object.keys(analytics.by_quality).length > 0 && (
-              <Box flex="1" minWidth="300px">
-                <Card>
-                  <CardContent>
-                    <Typography variant="h6" fontWeight={600} mb={2}>By Quality</Typography>
-                    {Object.entries(analytics.by_quality).map(([quality, count]: [string, any]) => (
-                      <Box key={quality} display="flex" justifyContent="space-between" mb={1}>
-                        <Typography>{quality}</Typography>
-                        <Typography fontWeight={600}>{count}</Typography>
-                      </Box>
-                    ))}
-                  </CardContent>
-                </Card>
-              </Box>
-            )}
-            
-            <Box flex="1" minWidth="300px">
-              <Card>
-                <CardContent>
-                  <Typography variant="h6" fontWeight={600} mb={2}>2FA Status</Typography>
-                  <Box display="flex" justifyContent="space-between" mb={1}>
-                    <Typography>Enabled</Typography>
-                    <Typography fontWeight={600}>{analytics.twofa_enabled || 0}</Typography>
+        <>
+          {/* Key Metrics */}
+          <Box display="flex" gap={3} flexWrap="wrap" mb={3}>
+            <Card sx={{ flex: '1', minWidth: '200px' }}>
+              <CardContent>
+                <Box display="flex" alignItems="center" justifyContent="space-between">
+                  <Box>
+                    <Typography variant="body2" color="text.secondary" gutterBottom>
+                      Total Records
+                    </Typography>
+                    <Typography variant="h4" fontWeight={700} color="primary.main">
+                      {analytics.total_count?.toLocaleString()}
+                    </Typography>
                   </Box>
-                  <Box display="flex" justifyContent="space-between">
-                    <Typography>Disabled</Typography>
-                    <Typography fontWeight={600}>{analytics.twofa_disabled || 0}</Typography>
+                  <Box sx={{ 
+                    width: 56, 
+                    height: 56, 
+                    borderRadius: 2, 
+                    bgcolor: 'primary.main', 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    justifyContent: 'center',
+                    opacity: 0.1
+                  }}>
+                    <Package size={28} />
                   </Box>
+                </Box>
+              </CardContent>
+            </Card>
+
+            <Card sx={{ flex: '1', minWidth: '200px' }}>
+              <CardContent>
+                <Box display="flex" alignItems="center" justifyContent="space-between">
+                  <Box>
+                    <Typography variant="body2" color="text.secondary" gutterBottom>
+                      Bulked
+                    </Typography>
+                    <Typography variant="h4" fontWeight={700} color="warning.main">
+                      {analytics.bulked_count?.toLocaleString()}
+                    </Typography>
+                  </Box>
+                  <TrendingUp size={28} color="#f59e0b" opacity={0.3} />
+                </Box>
+              </CardContent>
+            </Card>
+
+            <Card sx={{ flex: '1', minWidth: '200px' }}>
+              <CardContent>
+                <Box display="flex" alignItems="center" justifyContent="space-between">
+                  <Box>
+                    <Typography variant="body2" color="text.secondary" gutterBottom>
+                      Individual
+                    </Typography>
+                    <Typography variant="h4" fontWeight={700} color="success.main">
+                      {analytics.individual_count?.toLocaleString()}
+                    </Typography>
+                  </Box>
+                  <UsersIcon size={28} color="#10b981" opacity={0.3} />
+                </Box>
+              </CardContent>
+            </Card>
+
+            <Card sx={{ flex: '1', minWidth: '200px' }}>
+              <CardContent>
+                <Box display="flex" alignItems="center" justifyContent="space-between">
+                  <Box>
+                    <Typography variant="body2" color="text.secondary" gutterBottom>
+                      2FA Enabled
+                    </Typography>
+                    <Typography variant="h4" fontWeight={700}>
+                      {analytics.twofa_enabled?.toLocaleString()}
+                    </Typography>
+                  </Box>
+                  <TrendingDown size={28} opacity={0.3} />
+                </Box>
+              </CardContent>
+            </Card>
+          </Box>
+
+          {/* Charts Row 1 */}
+          <Box display="flex" gap={3} flexWrap="wrap" mb={3}>
+            {/* Distribution Pie Chart */}
+            <Card sx={{ flex: '1', minWidth: '300px' }}>
+              <CardContent>
+                <Typography variant="h6" fontWeight={600} gutterBottom>
+                  Registration Distribution
+                </Typography>
+                <ResponsiveContainer width="100%" height={300}>
+                  <PieChart>
+                    <Pie
+                      data={distributionData}
+                      cx="50%"
+                      cy="50%"
+                      labelLine={false}
+                      label={({ name, value, percent }) => `${name}: ${value} (${((percent || 0) * 100).toFixed(0)}%)`}
+                      outerRadius={80}
+                      fill="#8884d8"
+                      dataKey="value"
+                    >
+                      {distributionData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                  </PieChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+
+            {/* 2FA Status Pie Chart */}
+            <Card sx={{ flex: '1', minWidth: '300px' }}>
+              <CardContent>
+                <Typography variant="h6" fontWeight={600} gutterBottom>
+                  2FA Status
+                </Typography>
+                <ResponsiveContainer width="100%" height={300}>
+                  <PieChart>
+                    <Pie
+                      data={twofaData}
+                      cx="50%"
+                      cy="50%"
+                      labelLine={false}
+                      label={({ name, value, percent }) => `${name}: ${value} (${((percent || 0) * 100).toFixed(0)}%)`}
+                      outerRadius={80}
+                      fill="#8884d8"
+                      dataKey="value"
+                    >
+                      {twofaData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                  </PieChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+          </Box>
+
+          {/* Charts Row 2 */}
+          <Box display="flex" gap={3} flexWrap="wrap" mb={3}>
+            {/* Top Countries Bar Chart */}
+            {countryData.length > 0 && (
+              <Card sx={{ flex: '1', minWidth: '400px' }}>
+                <CardContent>
+                  <Typography variant="h6" fontWeight={600} gutterBottom>
+                    Top 10 Countries
+                  </Typography>
+                  <ResponsiveContainer width="100%" height={400}>
+                    <BarChart data={countryData} layout="vertical">
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis type="number" />
+                      <YAxis dataKey="name" type="category" width={100} />
+                      <Tooltip />
+                      <Bar dataKey="value" fill="#10b981" />
+                    </BarChart>
+                  </ResponsiveContainer>
                 </CardContent>
               </Card>
-            </Box>
+            )}
+
+            {/* Top Bot Names Bar Chart */}
+            {botnameData.length > 0 && (
+              <Card sx={{ flex: '1', minWidth: '400px' }}>
+                <CardContent>
+                  <Typography variant="h6" fontWeight={600} gutterBottom>
+                    Top 10 Bot Names
+                  </Typography>
+                  <ResponsiveContainer width="100%" height={400}>
+                    <BarChart data={botnameData} layout="vertical">
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis type="number" />
+                      <YAxis dataKey="name" type="category" width={100} />
+                      <Tooltip />
+                      <Bar dataKey="value" fill="#3b82f6" />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </CardContent>
+              </Card>
+            )}
           </Box>
-        </Box>
+
+          {/* Quality Distribution */}
+          {qualityData.length > 0 && (
+            <Card sx={{ mb: 3 }}>
+              <CardContent>
+                <Typography variant="h6" fontWeight={600} gutterBottom>
+                  Quality Distribution
+                </Typography>
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={qualityData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Bar dataKey="value" fill="#8b5cf6" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+          )}
+        </>
       ) : null}
     </DashboardLayout>
   );
